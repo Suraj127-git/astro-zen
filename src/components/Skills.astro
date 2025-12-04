@@ -7,7 +7,7 @@ const { row1, row2, details } = SITE_CONTENT.skills;
 ---
 
 <Section text="Experience Skills" href="skills">
-  <div class="skills-container overflow-hidden py-10 relative">
+  <div class="skills-container overflow-hidden py-10 relative" data-skill-details={JSON.stringify(details)}>
     <!-- Glow effect -->
     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent blur-2xl pointer-events-none"></div>
 
@@ -44,7 +44,7 @@ const { row1, row2, details } = SITE_CONTENT.skills;
 <!-- Include the modal -->
 <SkillModal />
 
-<script is:inline define:vars={{ skillDetails: details }}>
+<script>
   async function initSkillsAnimation() {
     try {
       const gsap = (await import('gsap')).default;
@@ -122,7 +122,7 @@ const { row1, row2, details } = SITE_CONTENT.skills;
         });
 
         // 3D tilt effect based on mouse position
-        item.addEventListener('mousemove', function(e) {
+        item.addEventListener('mousemove', function(e: MouseEvent) {
           const rect = this.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
@@ -173,23 +173,28 @@ const { row1, row2, details } = SITE_CONTENT.skills;
       // Ensure skills are visible even if animation fails
       const skillItems = document.querySelectorAll('.skill-item');
       skillItems.forEach(item => {
-        item.style.opacity = '1';
-        item.style.visibility = 'visible';
+        (item as HTMLElement).style.opacity = '1';
+        (item as HTMLElement).style.visibility = 'visible';
       });
     }
   }
 
   // Function to open modal with skill details
-  function openSkillModal(skillName) {
+  function openSkillModal(skillName: string) {
     const modal = document.getElementById('skill-modal');
     const modalSkillName = document.getElementById('modal-skill-name');
     const modalSkillDescription = document.getElementById('modal-skill-description');
     const modalSkillExperience = document.getElementById('modal-skill-experience');
+    const skillsContainer = document.querySelector('.skills-container');
 
-    if (!modal || !modalSkillName || !modalSkillDescription || !modalSkillExperience) return;
+    if (!modal || !modalSkillName || !modalSkillDescription || !modalSkillExperience || !skillsContainer) return;
 
-    // Find skill details
-    const skill = skillDetails.find(s => s.name === skillName);
+    // Get skill details from data attribute
+    const skillDetailsJson = skillsContainer.getAttribute('data-skill-details');
+    if (!skillDetailsJson) return;
+
+    const skillDetails = JSON.parse(skillDetailsJson);
+    const skill = skillDetails.find((s: any) => s.name === skillName);
 
     if (skill) {
       modalSkillName.textContent = skill.name;
@@ -204,7 +209,7 @@ const { row1, row2, details } = SITE_CONTENT.skills;
   }
 
   // Make function globally available
-  window.openSkillModal = openSkillModal;
+  (window as any).openSkillModal = openSkillModal;
 
   // Initialize immediately if DOM is ready
   if (document.readyState === 'loading') {
