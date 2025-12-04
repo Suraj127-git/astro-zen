@@ -55,136 +55,187 @@ const { experience } = Astro.props;
 
 <script>
   async function initExperienceAnimation() {
-    const gsap = (await import('gsap')).default;
-    const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
+    try {
+      const gsap = (await import('gsap')).default;
+      const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
-    gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Animate timeline line
-    gsap.from('.timeline-line', {
-      scrollTrigger: {
-        trigger: '.timeline-line',
-        start: "top 80%",
-        end: "bottom 20%",
-        scrub: 1
-      },
-      scaleY: 0,
-      transformOrigin: "top",
-      ease: "none"
-    });
+      // Ensure timeline line is visible
+      const timelineLine = document.querySelector('.timeline-line');
+      if (timelineLine) {
+        gsap.set(timelineLine, { opacity: 1 });
+        // Animate timeline line
+        gsap.from('.timeline-line', {
+          scrollTrigger: {
+            trigger: '.timeline-line',
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1
+          },
+          scaleY: 0,
+          transformOrigin: "top",
+          ease: "none"
+        });
+      }
 
-    document.querySelectorAll('.experience-item').forEach((item, index) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      // Card entrance with slide and scale
-      tl.from(item.querySelector('.experience-card'), {
-        x: index % 2 === 0 ? -100 : 100,
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      // Timeline dot pop
-      .from(item.querySelector('.timeline-dot'), {
-        scale: 0,
-        opacity: 0,
-        duration: 0.4,
-        ease: "back.out(2)"
-      }, "-=0.4")
-      // Company title with fade and slide
-      .from(item.querySelector('.company-title'), {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.5")
-      // Position title
-      .from(item.querySelector('.position-title'), {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-      }, "-=0.3")
-      // Date badge
-      .from(item.querySelector('.date-range'), {
-        scale: 0,
-        opacity: 0,
-        duration: 0.4,
-        ease: "back.out(1.7)"
-      }, "-=0.3");
-
-      // Animate summary items
-      const summaryItems = item.querySelectorAll('.summary-item');
-      if (summaryItems.length) {
-        tl.from(summaryItems, {
-          x: -30,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.08,
-          ease: "power2.out"
-        }, "-=0.2");
-      } else {
+      document.querySelectorAll('.experience-item').forEach((item, index) => {
+        // Ensure all content is visible by default
+        const card = item.querySelector('.experience-card');
+        const dot = item.querySelector('.timeline-dot');
+        const companyTitle = item.querySelector('.company-title');
+        const positionTitle = item.querySelector('.position-title');
+        const dateRange = item.querySelector('.date-range');
+        const summaryItems = item.querySelectorAll('.summary-item');
         const summaryText = item.querySelector('.summary-text');
-        if (summaryText) {
+
+        if (card) gsap.set(card, { opacity: 1, scale: 1 });
+        if (dot) gsap.set(dot, { opacity: 1, scale: 1 });
+        if (companyTitle) gsap.set(companyTitle, { opacity: 1 });
+        if (positionTitle) gsap.set(positionTitle, { opacity: 1 });
+        if (dateRange) gsap.set(dateRange, { opacity: 1, scale: 1 });
+        if (summaryItems.length) gsap.set(summaryItems, { opacity: 1 });
+        if (summaryText) gsap.set(summaryText, { opacity: 1 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        });
+
+        // Card entrance with slide and scale
+        if (card) {
+          tl.from(card, {
+            x: index % 2 === 0 ? -100 : 100,
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.8,
+            ease: "power3.out"
+          });
+        }
+
+        // Timeline dot pop
+        if (dot) {
+          tl.from(dot, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.4,
+            ease: "back.out(2)"
+          }, "-=0.4");
+        }
+
+        // Company title with fade and slide
+        if (companyTitle) {
+          tl.from(companyTitle, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.out"
+          }, "-=0.5");
+        }
+
+        // Position title
+        if (positionTitle) {
+          tl.from(positionTitle, {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+          }, "-=0.3");
+        }
+
+        // Date badge
+        if (dateRange) {
+          tl.from(dateRange, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.4,
+            ease: "back.out(1.7)"
+          }, "-=0.3");
+        }
+
+        // Animate summary items
+        if (summaryItems.length) {
+          tl.from(summaryItems, {
+            x: -30,
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.08,
+            ease: "power2.out"
+          }, "-=0.2");
+        } else if (summaryText) {
           tl.from(summaryText, {
             y: 20,
             opacity: 0,
             duration: 0.4,
           }, "-=0.2");
         }
-      }
 
-      // Hover 3D effect on cards
-      const card = item.querySelector('.experience-card');
-      card.addEventListener('mouseenter', function() {
-        gsap.to(this, {
-          y: -10,
-          scale: 1.02,
-          duration: 0.4,
-          ease: "power2.out"
+        // Hover 3D effect on cards
+        if (card) {
+          card.addEventListener('mouseenter', function() {
+            gsap.to(this, {
+              y: -10,
+              scale: 1.02,
+              duration: 0.4,
+              ease: "power2.out"
+            });
+          });
+
+          card.addEventListener('mouseleave', function() {
+            gsap.to(this, {
+              y: 0,
+              scale: 1,
+              rotationY: 0,
+              rotationX: 0,
+              duration: 0.4,
+              ease: "power2.out"
+            });
+          });
+
+          // 3D tilt on mouse move
+          card.addEventListener('mousemove', function(e: MouseEvent) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -5;
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            gsap.to(this, {
+              rotationX: rotateX,
+              rotationY: rotateY,
+              duration: 0.3,
+              ease: "power2.out",
+              transformPerspective: 1000
+            });
+          });
+        }
+      });
+    } catch (error) {
+      console.error('Experience animation failed:', error);
+      // Ensure all experience content is visible
+      const items = document.querySelectorAll('.experience-item');
+      items.forEach(item => {
+        const elements = item.querySelectorAll('.experience-card, .timeline-dot, .company-title, .position-title, .date-range, .summary-item, .summary-text');
+        elements.forEach(el => {
+          (el as HTMLElement).style.opacity = '1';
+          (el as HTMLElement).style.visibility = 'visible';
         });
       });
-
-      card.addEventListener('mouseleave', function() {
-        gsap.to(this, {
-          y: 0,
-          scale: 1,
-          rotationY: 0,
-          rotationX: 0,
-          duration: 0.4,
-          ease: "power2.out"
-        });
-      });
-
-      // 3D tilt on mouse move
-      card.addEventListener('mousemove', function(e: MouseEvent) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateX = ((y - centerY) / centerY) * -5;
-        const rotateY = ((x - centerX) / centerX) * 5;
-
-        gsap.to(this, {
-          rotationX: rotateX,
-          rotationY: rotateY,
-          duration: 0.3,
-          ease: "power2.out",
-          transformPerspective: 1000
-        });
-      });
-    });
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', initExperienceAnimation);
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initExperienceAnimation);
+  } else {
+    initExperienceAnimation();
+  }
 </script>
 
 <style>

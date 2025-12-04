@@ -59,147 +59,193 @@ const { name, specialty, summary, email } = Astro.props;
 
 <script>
   async function initHeroAnimation() {
-    const gsap = (await import('gsap')).default;
+    try {
+      const gsap = (await import('gsap')).default;
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" }});
+      // Add class to indicate animations are ready
+      document.documentElement.classList.add('animations-ready');
 
-    // Animate name characters with stagger
-    const nameChars = document.querySelectorAll('.hero-name span[data-index]');
-    tl.from(nameChars, {
-      y: 100,
-      opacity: 0,
-      rotationX: -90,
-      duration: 0.8,
-      stagger: 0.03,
-      ease: "back.out(1.7)"
-    })
-    // Animate specialty with underline
-    .from(".hero-specialty-text", {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-    }, "-=0.4")
-    .from(".hero-underline", {
-      width: 0,
-      opacity: 0,
-      duration: 0.6,
-      ease: "power2.inOut"
-    }, "-=0.2")
-    // Summary with reveal effect
-    .from(".hero-summary", {
-      y: 20,
-      opacity: 0,
-      duration: 0.8,
-    }, "-=0.3")
-    // Buttons with pop effect
-    .from(".hero-cta", {
-      scale: 0,
-      opacity: 0,
-      duration: 0.6,
-      ease: "back.out(2)"
-    }, "-=0.2")
-    .from(".hero-secondary-cta", {
-      scale: 0,
-      opacity: 0,
-      duration: 0.6,
-      ease: "back.out(2)"
-    }, "-=0.4")
-    // Scroll indicator
-    .from(".scroll-indicator", {
-      y: -20,
-      opacity: 0,
-      duration: 0.6,
-    }, "-=0.2");
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" }});
 
-    // Parallax effect for background gradients
-    gsap.to(".hero-bg-gradient", {
-      y: -50,
-      x: 50,
-      rotation: 90,
-      duration: 20,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    gsap.to(".hero-bg-gradient-2", {
-      y: 50,
-      x: -50,
-      rotation: -90,
-      duration: 25,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Mouse parallax effect
-    document.addEventListener('mousemove', (e) => {
-      const { clientX, clientY } = e;
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const percentX = (clientX - centerX) / centerX;
-      const percentY = (clientY - centerY) / centerY;
-
-      gsap.to('.hero-name', {
-        x: percentX * 20,
-        y: percentY * 10,
-        duration: 0.5,
-        ease: "power2.out"
-      });
-
-      gsap.to('.hero-specialty', {
-        x: percentX * 15,
-        y: percentY * 8,
-        duration: 0.6,
-        ease: "power2.out"
-      });
-
-      gsap.to('.hero-bg-gradient', {
-        x: 50 + percentX * 30,
-        y: -50 + percentY * 30,
-        duration: 1,
-        ease: "power2.out"
-      });
-    });
-
-    // Magnetic effect on buttons
-    const buttons = document.querySelectorAll('.hero-cta, .hero-secondary-cta');
-    buttons.forEach(button => {
-      button.addEventListener('mouseenter', function() {
-        gsap.to(this, {
-          scale: 1.05,
-          duration: 0.3,
+      // Animate name characters with stagger - using SET first to ensure visibility
+      const nameChars = document.querySelectorAll('.hero-name span[data-index]');
+      if (nameChars.length > 0) {
+        gsap.set(nameChars, { opacity: 1 }); // Ensure visible
+        tl.from(nameChars, {
+          y: 100,
+          opacity: 0,
+          rotationX: -90,
+          duration: 0.8,
+          stagger: 0.03,
           ease: "back.out(1.7)"
         });
+      }
+
+      // Animate specialty with underline
+      const specialtyText = document.querySelector(".hero-specialty-text");
+      if (specialtyText) {
+        gsap.set(specialtyText, { opacity: 1 });
+        tl.from(specialtyText, {
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+        }, "-=0.4");
+      }
+
+      const underline = document.querySelector(".hero-underline");
+      if (underline) {
+        tl.from(underline, {
+          width: 0,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.inOut"
+        }, "-=0.2");
+      }
+
+      // Summary with reveal effect
+      const summary = document.querySelector(".hero-summary");
+      if (summary) {
+        gsap.set(summary, { opacity: 1 });
+        tl.from(summary, {
+          y: 20,
+          opacity: 0,
+          duration: 0.8,
+        }, "-=0.3");
+      }
+
+      // Buttons with pop effect
+      const ctaBtn = document.querySelector(".hero-cta");
+      if (ctaBtn) {
+        gsap.set(ctaBtn, { opacity: 1, scale: 1 });
+        tl.from(ctaBtn, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.6,
+          ease: "back.out(2)"
+        }, "-=0.2");
+      }
+
+      const secondaryCta = document.querySelector(".hero-secondary-cta");
+      if (secondaryCta) {
+        gsap.set(secondaryCta, { opacity: 1, scale: 1 });
+        tl.from(secondaryCta, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.6,
+          ease: "back.out(2)"
+        }, "-=0.4");
+      }
+
+      // Scroll indicator
+      const scrollIndicator = document.querySelector(".scroll-indicator");
+      if (scrollIndicator) {
+        gsap.set(scrollIndicator, { opacity: 1 });
+        tl.from(scrollIndicator, {
+          y: -20,
+          opacity: 0,
+          duration: 0.6,
+        }, "-=0.2");
+      }
+
+      // Parallax effect for background gradients
+      gsap.to(".hero-bg-gradient", {
+        y: -50,
+        x: 50,
+        rotation: 90,
+        duration: 20,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
       });
 
-      button.addEventListener('mouseleave', function() {
-        gsap.to(this, {
-          scale: 1,
-          x: 0,
-          y: 0,
-          duration: 0.3,
+      gsap.to(".hero-bg-gradient-2", {
+        y: 50,
+        x: -50,
+        rotation: -90,
+        duration: 25,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+      // Mouse parallax effect
+      document.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        const percentX = (clientX - centerX) / centerX;
+        const percentY = (clientY - centerY) / centerY;
+
+        gsap.to('.hero-name', {
+          x: percentX * 20,
+          y: percentY * 10,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+
+        gsap.to('.hero-specialty', {
+          x: percentX * 15,
+          y: percentY * 8,
+          duration: 0.6,
+          ease: "power2.out"
+        });
+
+        gsap.to('.hero-bg-gradient', {
+          x: 50 + percentX * 30,
+          y: -50 + percentY * 30,
+          duration: 1,
           ease: "power2.out"
         });
       });
 
-      button.addEventListener('mousemove', function(e: MouseEvent) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
+      // Magnetic effect on buttons
+      const buttons = document.querySelectorAll('.hero-cta, .hero-secondary-cta');
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+          gsap.to(this, {
+            scale: 1.05,
+            duration: 0.3,
+            ease: "back.out(1.7)"
+          });
+        });
 
-        gsap.to(this, {
-          x: x * 0.3,
-          y: y * 0.3,
-          duration: 0.3,
-          ease: "power2.out"
+        button.addEventListener('mouseleave', function() {
+          gsap.to(this, {
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+
+        button.addEventListener('mousemove', function(e: MouseEvent) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          gsap.to(this, {
+            x: x * 0.3,
+            y: y * 0.3,
+            duration: 0.3,
+            ease: "power2.out"
+          });
         });
       });
-    });
+    } catch (error) {
+      console.error('Hero animation failed:', error);
+      // Ensure content is visible even if animation fails
+      document.documentElement.classList.add('animations-failed');
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', initHeroAnimation);
+  // Initialize immediately without waiting for DOMContentLoaded if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroAnimation);
+  } else {
+    initHeroAnimation();
+  }
 </script>
 
 <style>

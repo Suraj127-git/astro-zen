@@ -42,112 +42,135 @@ const { row1, row2 } = SITE_CONTENT.skills;
 
 <script>
   async function initSkillsAnimation() {
-    const gsap = (await import('gsap')).default;
-    const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
+    try {
+      const gsap = (await import('gsap')).default;
+      const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
-    gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Clone skills for infinite scroll effect
-    const row1 = document.querySelector('.skills-row-1 div');
-    const row2 = document.querySelector('.skills-row-2 div');
+      // Clone skills for infinite scroll effect
+      const row1 = document.querySelector('.skills-row-1 div');
+      const row2 = document.querySelector('.skills-row-2 div');
 
-    if (row1 && row2) {
-      row1.innerHTML += row1.innerHTML;
-      row2.innerHTML += row2.innerHTML;
+      if (row1 && row2) {
+        row1.innerHTML += row1.innerHTML;
+        row2.innerHTML += row2.innerHTML;
 
-      // First row animation (right to left)
-      gsap.to('.skills-row-1 div', {
-        x: '-50%',
-        duration: 30,
-        ease: 'none',
-        repeat: -1
-      });
-
-      // Second row animation (left to right)
-      gsap.fromTo('.skills-row-2 div',
-        { x: '-50%' },
-        {
-          x: '0%',
+        // First row animation (right to left)
+        gsap.to('.skills-row-1 div', {
+          x: '-50%',
           duration: 30,
           ease: 'none',
           repeat: -1
-        }
-      );
+        });
 
-      // Pause on hover
-      const rows = ['.skills-row-1', '.skills-row-2'];
-      rows.forEach(selector => {
-        const row = document.querySelector(selector);
-        row?.addEventListener('mouseenter', () => {
-          gsap.to(`${selector} div`, { timeScale: 0.2, duration: 0.5 });
+        // Second row animation (left to right)
+        gsap.fromTo('.skills-row-2 div',
+          { x: '-50%' },
+          {
+            x: '0%',
+            duration: 30,
+            ease: 'none',
+            repeat: -1
+          }
+        );
+
+        // Pause on hover
+        const rows = ['.skills-row-1', '.skills-row-2'];
+        rows.forEach(selector => {
+          const row = document.querySelector(selector);
+          row?.addEventListener('mouseenter', () => {
+            gsap.to(`${selector} div`, { timeScale: 0.2, duration: 0.5 });
+          });
+          row?.addEventListener('mouseleave', () => {
+            gsap.to(`${selector} div`, { timeScale: 1, duration: 0.5 });
+          });
         });
-        row?.addEventListener('mouseleave', () => {
-          gsap.to(`${selector} div`, { timeScale: 1, duration: 0.5 });
+      }
+
+      // 3D hover effect on individual skills
+      const skillItems = document.querySelectorAll('.skill-item');
+
+      // Ensure items are visible
+      gsap.set(skillItems, { opacity: 1, scale: 1 });
+
+      skillItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          gsap.to(this, {
+            scale: 1.1,
+            rotationY: 5,
+            z: 50,
+            duration: 0.3,
+            ease: "back.out(1.7)"
+          });
         });
+
+        item.addEventListener('mouseleave', function() {
+          gsap.to(this, {
+            scale: 1,
+            rotationY: 0,
+            z: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+
+        // 3D tilt effect based on mouse position
+        item.addEventListener('mousemove', function(e: MouseEvent) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+
+          gsap.to(this, {
+            rotationX: rotateX,
+            rotationY: rotateY,
+            duration: 0.3,
+            ease: "power2.out",
+            transformPerspective: 1000
+          });
+        });
+      });
+
+      // Entrance animation with visibility safeguard
+      gsap.from('.skill-item', {
+        scrollTrigger: {
+          trigger: '.skills-container',
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        },
+        scale: 0,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.05,
+        ease: "back.out(1.7)",
+        onStart: function() {
+          // Ensure base visibility
+          gsap.set('.skill-item', { visibility: 'visible' });
+        }
+      });
+    } catch (error) {
+      console.error('Skills animation failed:', error);
+      // Ensure skills are visible even if animation fails
+      const skillItems = document.querySelectorAll('.skill-item');
+      skillItems.forEach(item => {
+        (item as HTMLElement).style.opacity = '1';
+        (item as HTMLElement).style.visibility = 'visible';
       });
     }
-
-    // 3D hover effect on individual skills
-    const skillItems = document.querySelectorAll('.skill-item');
-    skillItems.forEach(item => {
-      item.addEventListener('mouseenter', function() {
-        gsap.to(this, {
-          scale: 1.1,
-          rotationY: 5,
-          z: 50,
-          duration: 0.3,
-          ease: "back.out(1.7)"
-        });
-      });
-
-      item.addEventListener('mouseleave', function() {
-        gsap.to(this, {
-          scale: 1,
-          rotationY: 0,
-          z: 0,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-
-      // 3D tilt effect based on mouse position
-      item.addEventListener('mousemove', function(e: MouseEvent) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateX = ((y - centerY) / centerY) * -10;
-        const rotateY = ((x - centerX) / centerX) * 10;
-
-        gsap.to(this, {
-          rotationX: rotateX,
-          rotationY: rotateY,
-          duration: 0.3,
-          ease: "power2.out",
-          transformPerspective: 1000
-        });
-      });
-    });
-
-    // Entrance animation
-    gsap.from('.skill-item', {
-      scrollTrigger: {
-        trigger: '.skills-container',
-        start: "top 80%",
-        toggleActions: "play none none reverse"
-      },
-      scale: 0,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.05,
-      ease: "back.out(1.7)"
-    });
   }
 
-  document.addEventListener('DOMContentLoaded', initSkillsAnimation);
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSkillsAnimation);
+  } else {
+    initSkillsAnimation();
+  }
 </script>
 
 <style>

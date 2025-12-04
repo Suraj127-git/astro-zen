@@ -45,121 +45,176 @@ const { description, name } = Astro.props;
 
 <script>
   async function initAboutAnimation() {
-    const gsap = (await import('gsap')).default;
-    const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
+    try {
+      const gsap = (await import('gsap')).default;
+      const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
-    gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger);
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.about-card',
-        start: "top 80%",
-        toggleActions: "play none none reverse"
+      // Ensure all about content is visible by default
+      const card = document.querySelector('.about-card');
+      const cornerTl = document.querySelector('.corner-tl');
+      const cornerBr = document.querySelector('.corner-br');
+      const quoteMark = document.querySelector('.quote-mark');
+      const paragraphs = document.querySelectorAll('.paragraph');
+      const hashtags = document.querySelectorAll('.hashtag');
+      const decorativeLine = document.querySelector('.decorative-line');
+
+      if (card) gsap.set(card, { opacity: 1, scale: 1 });
+      if (cornerTl) gsap.set(cornerTl, { opacity: 1 });
+      if (cornerBr) gsap.set(cornerBr, { opacity: 1 });
+      if (quoteMark) gsap.set(quoteMark, { opacity: 1, scale: 1 });
+      if (paragraphs.length) gsap.set(paragraphs, { opacity: 1 });
+      if (hashtags.length) gsap.set(hashtags, { opacity: 1, scale: 1 });
+      if (decorativeLine) gsap.set(decorativeLine, { opacity: 1 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.about-card',
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Card entrance
+      if (card) {
+        tl.from(card, {
+          opacity: 0,
+          y: 80,
+          scale: 0.95,
+          duration: 0.9,
+          ease: "power3.out"
+        });
       }
-    });
 
-    // Card entrance
-    tl.from('.about-card', {
-      opacity: 0,
-      y: 80,
-      scale: 0.95,
-      duration: 0.9,
-      ease: "power3.out"
-    })
-    // Corner decorations
-    .from('.corner-tl', {
-      x: -20,
-      y: -20,
-      opacity: 0,
-      duration: 0.6,
-      ease: "back.out(1.7)"
-    }, "-=0.5")
-    .from('.corner-br', {
-      x: 20,
-      y: 20,
-      opacity: 0,
-      duration: 0.6,
-      ease: "back.out(1.7)"
-    }, "-=0.5")
-    // Quote mark
-    .from('.quote-mark', {
-      scale: 0,
-      opacity: 0,
-      rotation: -180,
-      duration: 0.7,
-      ease: "back.out(1.7)"
-    }, "-=0.3")
-    // Paragraphs with stagger
-    .from('.paragraph', {
-      opacity: 0,
-      y: 30,
-      duration: 0.6,
-      stagger: 0.15,
-      ease: "power2.out"
-    }, "-=0.2")
-    // Hashtags pop in
-    .from('.hashtag', {
-      scale: 0,
-      opacity: 0,
-      duration: 0.4,
-      stagger: 0.08,
-      ease: "back.out(2)"
-    }, "-=0.2")
-    // Decorative line
-    .from('.decorative-line', {
-      scaleX: 0,
-      opacity: 0,
-      duration: 0.8,
-      ease: "power2.inOut"
-    }, "-=0.2");
-
-    // Floating animation for card
-    gsap.to('.about-card', {
-      y: -10,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Glow effect on hover for hashtags
-    const hashtags = document.querySelectorAll('.hashtag');
-    hashtags.forEach(tag => {
-      tag.addEventListener('mouseenter', function(this: HTMLElement) {
-        gsap.to(this, {
-          scale: 1.1,
-          boxShadow: "0 0 20px rgba(37, 99, 235, 0.5)",
-          duration: 0.3,
+      // Corner decorations
+      if (cornerTl) {
+        tl.from(cornerTl, {
+          x: -20,
+          y: -20,
+          opacity: 0,
+          duration: 0.6,
           ease: "back.out(1.7)"
-        });
-      });
+        }, "-=0.5");
+      }
 
-      tag.addEventListener('mouseleave', function(this: HTMLElement) {
-        gsap.to(this, {
-          scale: 1,
-          boxShadow: "0 0 0px rgba(37, 99, 235, 0)",
-          duration: 0.3
-        });
-      });
-    });
+      if (cornerBr) {
+        tl.from(cornerBr, {
+          x: 20,
+          y: 20,
+          opacity: 0,
+          duration: 0.6,
+          ease: "back.out(1.7)"
+        }, "-=0.5");
+      }
 
-    // Parallax effect on about card
-    ScrollTrigger.create({
-      trigger: '.about-card',
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        gsap.to('.about-card', {
-          y: progress * -30,
-          ease: "none"
+      // Quote mark
+      if (quoteMark) {
+        tl.from(quoteMark, {
+          scale: 0,
+          opacity: 0,
+          rotation: -180,
+          duration: 0.7,
+          ease: "back.out(1.7)"
+        }, "-=0.3");
+      }
+
+      // Paragraphs with stagger
+      if (paragraphs.length) {
+        tl.from(paragraphs, {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+          stagger: 0.15,
+          ease: "power2.out"
+        }, "-=0.2");
+      }
+
+      // Hashtags pop in
+      if (hashtags.length) {
+        tl.from(hashtags, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "back.out(2)"
+        }, "-=0.2");
+      }
+
+      // Decorative line
+      if (decorativeLine) {
+        tl.from(decorativeLine, {
+          scaleX: 0,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.inOut"
+        }, "-=0.2");
+      }
+
+      // Floating animation for card
+      if (card) {
+        gsap.to(card, {
+          y: -10,
+          duration: 3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
         });
       }
-    });
+
+      // Glow effect on hover for hashtags
+      hashtags.forEach(tag => {
+        tag.addEventListener('mouseenter', function(this: HTMLElement) {
+          gsap.to(this, {
+            scale: 1.1,
+            boxShadow: "0 0 20px rgba(37, 99, 235, 0.5)",
+            duration: 0.3,
+            ease: "back.out(1.7)"
+          });
+        });
+
+        tag.addEventListener('mouseleave', function(this: HTMLElement) {
+          gsap.to(this, {
+            scale: 1,
+            boxShadow: "0 0 0px rgba(37, 99, 235, 0)",
+            duration: 0.3
+          });
+        });
+      });
+
+      // Parallax effect on about card
+      if (card) {
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            gsap.to(card, {
+              y: progress * -30,
+              ease: "none"
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('About animation failed:', error);
+      // Ensure all about content is visible even if animation fails
+      const elements = document.querySelectorAll('.about-card, .corner-tl, .corner-br, .quote-mark, .paragraph, .hashtag, .decorative-line');
+      elements.forEach(el => {
+        (el as HTMLElement).style.opacity = '1';
+        (el as HTMLElement).style.visibility = 'visible';
+      });
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', initAboutAnimation);
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAboutAnimation);
+  } else {
+    initAboutAnimation();
+  }
 </script>
 
 <style>
