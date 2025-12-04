@@ -1,103 +1,45 @@
 ---
-// Professional Loading Screen with Progress Indicator
+// Simple Loading Screen without GSAP dependency
 ---
 
 <div id="page-loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden">
   <div class="relative">
-    <!-- Animated Logo/Initial -->
     <div class="loader-content text-center">
       <div class="mb-8">
-        <h1 class="text-6xl md:text-8xl font-bold text-white font-serif tracking-tightest loader-name">
+        <h1 class="text-6xl md:text-8xl font-bold text-white font-serif tracking-tightest loader-name animate-fade-in">
           SS
         </h1>
         <div class="mt-4 h-1 w-32 mx-auto bg-neutral/20 rounded-full overflow-hidden">
-          <div id="progress-bar" class="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full transition-all duration-300 animate-progress"></div>
         </div>
       </div>
-      <p class="text-sm text-neutral font-medium loader-text">Loading Experience...</p>
-    </div>
-
-    <!-- Animated Circles -->
-    <div class="absolute -inset-20 pointer-events-none">
-      <div class="loader-circle absolute top-0 left-0 w-32 h-32 border-2 border-primary/20 rounded-full"></div>
-      <div class="loader-circle absolute bottom-0 right-0 w-24 h-24 border-2 border-primary/30 rounded-full"></div>
+      <p class="text-sm text-neutral font-medium loader-text animate-fade-in-delay">Loading...</p>
     </div>
   </div>
 </div>
 
 <script>
-  async function initLoader() {
-    const gsap = (await import('gsap')).default;
+  // Simple loader without GSAP dependency
+  function initLoader() {
     const loader = document.getElementById('page-loader');
-    const progressBar = document.getElementById('progress-bar');
+    if (!loader) return;
 
-    if (!loader || !progressBar) return;
+    // Prevent scrolling during load
+    document.body.style.overflow = 'hidden';
 
-    // Animate loader entrance
-    gsap.from('.loader-name', {
-      scale: 0,
-      opacity: 0,
-      duration: 0.8,
-      ease: "back.out(1.7)"
-    });
-
-    gsap.from('.loader-text', {
-      y: 20,
-      opacity: 0,
-      duration: 0.6,
-      delay: 0.3
-    });
-
-    // Animate circles
-    gsap.to('.loader-circle', {
-      rotate: 360,
-      duration: 3,
-      repeat: -1,
-      ease: "none",
-      stagger: 0.2
-    });
-
-    // Simulate loading progress
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 15;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-
-        // Hide loader after loading complete
-        setTimeout(() => {
-          gsap.to(loader, {
-            opacity: 0,
-            duration: 0.6,
-            ease: "power2.inOut",
-            onComplete: () => {
-              loader.style.display = 'none';
-              document.body.style.overflow = 'auto';
-            }
-          });
-        }, 300);
-      }
-      progressBar.style.width = `${progress}%`;
-    }, 150);
-
-    // Fallback: ensure loader hides after max time
+    // Hide loader after a short delay to ensure content is ready
     setTimeout(() => {
-      clearInterval(interval);
-      gsap.to(loader, {
-        opacity: 0,
-        duration: 0.6,
-        onComplete: () => {
-          loader.style.display = 'none';
-          document.body.style.overflow = 'auto';
-        }
-      });
-    }, 3000);
+      loader.style.opacity = '0';
+      loader.style.transition = 'opacity 0.5s ease-out';
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }, 500);
+    }, 1500);
   }
 
-  // Prevent scrolling during load
-  document.body.style.overflow = 'hidden';
-
+  // Run immediately
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initLoader);
   } else {
@@ -106,22 +48,39 @@
 </script>
 
 <style>
-  #page-loader {
-    backdrop-filter: blur(10px);
-  }
-
-  .loader-circle {
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 0.3;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
       transform: scale(1);
     }
-    50% {
-      opacity: 0.6;
-      transform: scale(1.1);
+  }
+
+  @keyframes progress {
+    from {
+      width: 0%;
     }
+    to {
+      width: 100%;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .animate-fade-in-delay {
+    animation: fadeIn 0.6s ease-out 0.3s both;
+  }
+
+  .animate-progress {
+    animation: progress 1.5s ease-out;
+  }
+
+  #page-loader {
+    backdrop-filter: blur(10px);
   }
 </style>
