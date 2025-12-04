@@ -5,89 +5,219 @@ type Props = HeroProps;
 const { name, specialty, summary, email } = Astro.props;
 ---
 
-<section class="py-15 md:py-10 relative" id="#hero">
-  <h1 class="text-7xl font-serif mb-1.5 sm:text-8xl md:text-9xl md:mb-0 text-white font-bold tracking-tightest hero-name">
-    {name}
-  </h1>
-  <p class="text-4xl sm:text-5xl leading-[46px] md:text-6xl font-serif text-primary font-bold tracking-tighter mb-6 hero-specialty">
-    {specialty}
-  </p>
-  <p class="text-neutral font-normal text-base md:text-lg mb-12 hero-summary">
-    {summary}
-  </p>
+<section class="py-20 md:py-24 relative overflow-hidden" id="#hero">
+  <!-- Animated background elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="hero-bg-gradient absolute top-20 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+    <div class="hero-bg-gradient-2 absolute bottom-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+  </div>
 
-  <a class="text-sm py-5 px-8 text-[#fff] inline-block font-medium leading-5 bg-primary rounded-full hero-cta"
-    href={`mailto:${email}`}>Get in Touch</a>
+  <!-- Content -->
+  <div class="relative z-10">
+    <h1 class="text-7xl font-serif mb-1.5 sm:text-8xl md:text-9xl md:mb-2 text-white font-bold tracking-tightest hero-name">
+      <span class="inline-block hero-name-char">{name.split('').map((char, i) => <span class="inline-block" data-index={i}>{char === ' ' ? '\u00A0' : char}</span>)}</span>
+    </h1>
+    <p class="text-4xl sm:text-5xl leading-[46px] md:text-6xl font-serif text-primary font-bold tracking-tighter mb-6 hero-specialty relative">
+      <span class="hero-specialty-text">{specialty}</span>
+      <span class="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-primary to-blue-400 hero-underline"></span>
+    </p>
+    <p class="text-neutral font-normal text-base md:text-lg mb-12 max-w-2xl hero-summary leading-relaxed">
+      {summary}
+    </p>
+
+    <div class="flex gap-4 flex-wrap items-center">
+      <a
+        class="group text-sm py-5 px-8 text-white inline-flex items-center gap-2 font-medium leading-5 bg-gradient-to-r from-primary to-blue-500 rounded-full hero-cta relative overflow-hidden shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300"
+        href={`mailto:${email}`}
+      >
+        <span class="relative z-10">Get in Touch</span>
+        <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </a>
+
+      <a
+        href="#projects"
+        class="group text-sm py-5 px-8 text-primary inline-flex items-center gap-2 font-medium leading-5 border-2 border-primary/50 rounded-full hover:bg-primary/10 transition-all duration-300 hero-secondary-cta"
+      >
+        <span>View Work</span>
+        <svg class="w-4 h-4 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator">
+    <div class="w-6 h-10 border-2 border-neutral/30 rounded-full flex justify-center">
+      <div class="w-1 h-2 bg-primary rounded-full mt-2 animate-bounce"></div>
+    </div>
+  </div>
 </section>
 
 <script>
   async function initHeroAnimation() {
     const gsap = (await import('gsap')).default;
-    
+
     const tl = gsap.timeline({ defaults: { ease: "power3.out" }});
-    
-    tl.from(".hero-name", {
-      y: 50,
+
+    // Animate name characters with stagger
+    const nameChars = document.querySelectorAll('.hero-name span[data-index]');
+    tl.from(nameChars, {
+      y: 100,
       opacity: 0,
-      duration: 1,
+      rotationX: -90,
+      duration: 0.8,
+      stagger: 0.03,
+      ease: "back.out(1.7)"
     })
-    .from(".hero-specialty", {
+    // Animate specialty with underline
+    .from(".hero-specialty-text", {
       y: 30,
       opacity: 0,
       duration: 0.8,
-    }, "-=0.5")
+    }, "-=0.4")
+    .from(".hero-underline", {
+      width: 0,
+      opacity: 0,
+      duration: 0.6,
+      ease: "power2.inOut"
+    }, "-=0.2")
+    // Summary with reveal effect
     .from(".hero-summary", {
       y: 20,
       opacity: 0,
       duration: 0.8,
     }, "-=0.3")
+    // Buttons with pop effect
     .from(".hero-cta", {
       scale: 0,
       opacity: 0,
       duration: 0.6,
-      ease: "back.out(1.7)"
+      ease: "back.out(2)"
+    }, "-=0.2")
+    .from(".hero-secondary-cta", {
+      scale: 0,
+      opacity: 0,
+      duration: 0.6,
+      ease: "back.out(2)"
+    }, "-=0.4")
+    // Scroll indicator
+    .from(".scroll-indicator", {
+      y: -20,
+      opacity: 0,
+      duration: 0.6,
     }, "-=0.2");
 
-    // Floating animation for the button
-    gsap.to(".hero-cta", {
-      y: -8,
-      duration: 1.5,
+    // Parallax effect for background gradients
+    gsap.to(".hero-bg-gradient", {
+      y: -50,
+      x: 50,
+      rotation: 90,
+      duration: 20,
       repeat: -1,
       yoyo: true,
-      ease: "power1.inOut"
+      ease: "sine.inOut"
     });
 
-    // Button hover animations
-    const button = document.querySelector('.hero-cta');
-    
-    button?.addEventListener('mouseenter', () => {
-      gsap.to('.hero-cta', {
-        scale: 1.1,
-        backgroundColor: "#2563eb",
-        duration: 0.3,
-        ease: "back.out(1.7)"
+    gsap.to(".hero-bg-gradient-2", {
+      y: 50,
+      x: -50,
+      rotation: -90,
+      duration: 25,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    // Mouse parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const { clientX, clientY } = e;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const percentX = (clientX - centerX) / centerX;
+      const percentY = (clientY - centerY) / centerY;
+
+      gsap.to('.hero-name', {
+        x: percentX * 20,
+        y: percentY * 10,
+        duration: 0.5,
+        ease: "power2.out"
       });
-    });
 
-    button?.addEventListener('mouseleave', () => {
-      gsap.to('.hero-cta', {
-        scale: 1,
-        backgroundColor: "#3b82f6",
-        duration: 0.3,
+      gsap.to('.hero-specialty', {
+        x: percentX * 15,
+        y: percentY * 8,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+
+      gsap.to('.hero-bg-gradient', {
+        x: 50 + percentX * 30,
+        y: -50 + percentY * 30,
+        duration: 1,
         ease: "power2.out"
       });
     });
 
-    // Click animation
-    button?.addEventListener('click', () => {
-      gsap.to('.hero-cta', {
-        scale: 0.95,
-        duration: 0.1,
-        yoyo: true,
-        repeat: 1
+    // Magnetic effect on buttons
+    const buttons = document.querySelectorAll('.hero-cta, .hero-secondary-cta');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', function(e) {
+        gsap.to(this, {
+          scale: 1.05,
+          duration: 0.3,
+          ease: "back.out(1.7)"
+        });
+      });
+
+      button.addEventListener('mouseleave', function(e) {
+        gsap.to(this, {
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+
+      button.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        gsap.to(this, {
+          x: x * 0.3,
+          y: y * 0.3,
+          duration: 0.3,
+          ease: "power2.out"
+        });
       });
     });
   }
 
   document.addEventListener('DOMContentLoaded', initHeroAnimation);
 </script>
+
+<style>
+  .hero-name-char span {
+    display: inline-block;
+    transform-origin: center bottom;
+  }
+
+  .hero-underline {
+    width: 0;
+  }
+
+  .scroll-indicator {
+    animation: fadeInOut 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+</style>

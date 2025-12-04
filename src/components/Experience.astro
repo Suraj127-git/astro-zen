@@ -10,88 +10,190 @@ const { experience } = Astro.props;
 ---
 
 <Section text="Work Experience" href="experience">
-  {
-    experience.map(({ company, position, startDate, endDate, summary }) => (
-      <div class="mb-10 experience-item">
-        <h3 class="text-2xl font-serif font-semibold text-white mb-1.5 company-title">
-          {company}
-        </h3>
-        <div class="flex flex-col items-start pb-5">
-          <h4 class="text-2xl font-serif text-primary font-medium mb-0.5 position-title">
-            {position}
-          </h4>
-          <span class="text-sm text-white/70 pb-[2px] date-range">
-            {startDate} — {endDate}
-          </span>
+  <div class="relative">
+    <!-- Timeline line -->
+    <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-blue-500 to-transparent timeline-line hidden md:block"></div>
+
+    {
+      experience.map(({ company, position, startDate, endDate, summary }, index) => (
+        <div class="mb-12 experience-item relative pl-0 md:pl-8">
+          <!-- Timeline dot -->
+          <div class="absolute left-0 top-6 w-3 h-3 bg-primary rounded-full border-4 border-black timeline-dot hidden md:block -translate-x-[5px]"></div>
+
+          <div class="group p-6 md:p-8 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 experience-card">
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+              <div>
+                <h3 class="text-2xl md:text-3xl font-serif font-semibold text-white mb-2 company-title group-hover:text-primary transition-colors duration-300">
+                  {company}
+                </h3>
+                <h4 class="text-xl md:text-2xl font-serif text-primary font-medium mb-2 position-title">
+                  {position}
+                </h4>
+              </div>
+              <span class="text-sm text-white/70 px-4 py-2 rounded-full bg-white/5 border border-white/10 date-range inline-block md:ml-4">
+                {startDate} — {endDate}
+              </span>
+            </div>
+
+            {Array.isArray(summary) ? (
+              <ul class="list-none summary-list space-y-3">
+                {summary.map((log) => (
+                  <li class="text-base relative text-neutral pl-8 before:absolute before:left-0 before:top-1 before:content-[url(/check.svg)] summary-item hover:text-white transition-colors duration-300">
+                    {log}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="text-base text-neutral summary-text">{summary}</p>
+            )}
+          </div>
         </div>
-        {Array.isArray(summary) ? (
-          <ul class="list-none summary-list">
-            {summary.map((log) => (
-              <li class="text-base relative text-neutral pl-8 mb-3 before:absolute before:left-0 before:top-1 before:content-[url(/check.svg)] summary-item">
-                {log}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-base text-neutral summary-text">{summary}</p>
-        )}
-      </div>
-    ))
-  }
+      ))
+    }
+  </div>
 </Section>
 
 <script>
   async function initExperienceAnimation() {
     const gsap = (await import('gsap')).default;
     const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
-    
+
     gsap.registerPlugin(ScrollTrigger);
 
-    document.querySelectorAll('.experience-item').forEach((item) => {
+    // Animate timeline line
+    gsap.from('.timeline-line', {
+      scrollTrigger: {
+        trigger: '.timeline-line',
+        start: "top 80%",
+        end: "bottom 20%",
+        scrub: 1
+      },
+      scaleY: 0,
+      transformOrigin: "top",
+      ease: "none"
+    });
+
+    document.querySelectorAll('.experience-item').forEach((item, index) => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: "top 80%",
+          start: "top 85%",
           toggleActions: "play none none reverse"
         }
       });
 
-      tl.from(item.querySelector('.company-title'), {
-        x: -30,
+      // Card entrance with slide and scale
+      tl.from(item.querySelector('.experience-card'), {
+        x: index % 2 === 0 ? -100 : 100,
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "power3.out"
+      })
+      // Timeline dot pop
+      .from(item.querySelector('.timeline-dot'), {
+        scale: 0,
+        opacity: 0,
+        duration: 0.4,
+        ease: "back.out(2)"
+      }, "-=0.4")
+      // Company title with fade and slide
+      .from(item.querySelector('.company-title'), {
+        y: 30,
         opacity: 0,
         duration: 0.6,
         ease: "power2.out"
-      })
+      }, "-=0.5")
+      // Position title
       .from(item.querySelector('.position-title'), {
         y: 20,
         opacity: 0,
         duration: 0.5,
       }, "-=0.3")
+      // Date badge
       .from(item.querySelector('.date-range'), {
-        x: -20,
+        scale: 0,
         opacity: 0,
         duration: 0.4,
-      }, "-=0.2");
+        ease: "back.out(1.7)"
+      }, "-=0.3");
 
       // Animate summary items
       const summaryItems = item.querySelectorAll('.summary-item');
       if (summaryItems.length) {
         tl.from(summaryItems, {
-          x: -20,
+          x: -30,
           opacity: 0,
           duration: 0.4,
-          stagger: 0.1,
+          stagger: 0.08,
           ease: "power2.out"
         }, "-=0.2");
       } else {
-        tl.from(item.querySelector('.summary-text'), {
-          y: 20,
-          opacity: 0,
-          duration: 0.4,
-        }, "-=0.2");
+        const summaryText = item.querySelector('.summary-text');
+        if (summaryText) {
+          tl.from(summaryText, {
+            y: 20,
+            opacity: 0,
+            duration: 0.4,
+          }, "-=0.2");
+        }
       }
+
+      // Hover 3D effect on cards
+      const card = item.querySelector('.experience-card');
+      card.addEventListener('mouseenter', function() {
+        gsap.to(this, {
+          y: -10,
+          scale: 1.02,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      });
+
+      card.addEventListener('mouseleave', function() {
+        gsap.to(this, {
+          y: 0,
+          scale: 1,
+          rotationY: 0,
+          rotationX: 0,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      });
+
+      // 3D tilt on mouse move
+      card.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+
+        gsap.to(this, {
+          rotationX: rotateX,
+          rotationY: rotateY,
+          duration: 0.3,
+          ease: "power2.out",
+          transformPerspective: 1000
+        });
+      });
     });
   }
 
   document.addEventListener('DOMContentLoaded', initExperienceAnimation);
 </script>
+
+<style>
+  .experience-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .timeline-dot {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+  }
+</style>

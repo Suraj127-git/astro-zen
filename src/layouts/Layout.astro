@@ -1,5 +1,6 @@
 ---
 import Header from "@components/Header.astro";
+import Loader from "@components/Loader.astro";
 import "@fontsource/be-vietnam-pro";
 import "@fontsource-variable/gabarito";
 import { SITE_CONFIG } from "@config";
@@ -26,9 +27,14 @@ const ogImgUrl = canonicalURL + socialImage;
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
     <title>{title}</title>
 
     <meta property="og:title" content={title} />
@@ -42,11 +48,77 @@ const ogImgUrl = canonicalURL + socialImage;
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImgUrl} />
   </head>
-  <body class="font-sans bg-black">
+  <body class="font-sans bg-black overflow-x-hidden">
+    <Loader />
+
+    <!-- Custom cursor -->
+    <div id="custom-cursor" class="hidden md:block fixed w-5 h-5 rounded-full border-2 border-primary pointer-events-none z-[9999] transition-transform duration-100 ease-out"></div>
+    <div id="cursor-dot" class="hidden md:block fixed w-1.5 h-1.5 rounded-full bg-primary pointer-events-none z-[9999]"></div>
+
     <Header siteLogo={siteLogo} navLinks={navLinks} />
-    <main class="max-w-5xl px-4 mx-auto">
+    <main class="max-w-5xl px-4 mx-auto" id="main-content">
       <slot />
     </main>
     <Footer author={author} socialLinks={socialLinks} />
+
+    <script>
+      // Custom cursor with magnetic effect
+      async function initCustomCursor() {
+        const gsap = (await import('gsap')).default;
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+
+        if (!cursor || !cursorDot) return;
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        gsap.to(cursor, {
+          duration: 0.3,
+          ease: "power2.out",
+          onUpdate: function() {
+            gsap.set(cursor, { x: mouseX - 10, y: mouseY - 10 });
+          }
+        });
+
+        gsap.to(cursorDot, {
+          duration: 0.1,
+          ease: "power2.out",
+          onUpdate: function() {
+            gsap.set(cursorDot, { x: mouseX - 3, y: mouseY - 3 });
+          }
+        });
+
+        // Animate cursor on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, input, textarea, [role="button"]');
+
+        interactiveElements.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            gsap.to(cursor, { scale: 1.5, duration: 0.3, ease: "back.out(1.7)" });
+            gsap.to(cursorDot, { scale: 0, duration: 0.2 });
+          });
+
+          el.addEventListener('mouseleave', () => {
+            gsap.to(cursor, { scale: 1, duration: 0.3 });
+            gsap.to(cursorDot, { scale: 1, duration: 0.2 });
+          });
+        });
+
+        // Hide default cursor
+        document.body.style.cursor = 'none';
+        interactiveElements.forEach(el => {
+          (el as HTMLElement).style.cursor = 'none';
+        });
+      }
+
+      if (window.innerWidth >= 768) {
+        document.addEventListener('DOMContentLoaded', initCustomCursor);
+      }
+    </script>
   </body>
 </html>

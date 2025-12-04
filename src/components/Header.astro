@@ -9,16 +9,17 @@ const { siteLogo, navLinks } = Astro.props;
 ---
 
 <header
-  class="max-w-5xl mx-auto flex justify-between px-5 py-6 top-0 z-50 sticky bg-black animate-slideIn"
+  class="max-w-5xl mx-auto flex justify-between px-5 py-6 top-0 z-50 sticky bg-black/80 backdrop-blur-xl border-b border-white/5 animate-slideIn"
 >
-  <a href="/" aria-label="Home link">
+  <a href="/" aria-label="Home link" class="logo-link relative group">
     <Image
-      class="rounded-full"
+      class="rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
       src={siteLogo}
       width="45"
       height="45"
       alt="website logo"
     />
+    <div class="absolute inset-0 rounded-full bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
   </a>
 
   <button
@@ -32,15 +33,15 @@ const { siteLogo, navLinks } = Astro.props;
   </button>
 
   <nav
-    class="hidden text-neutral border absolute right-5 top-20 bg-black border-neutral/40 py-5 px-4 rounded-xl sm:block sm:border-0 sm:p-0 sm:static sm:bg-transparent"
+    class="hidden text-neutral border absolute right-5 top-20 bg-black/90 backdrop-blur-xl border-neutral/40 py-5 px-4 rounded-xl shadow-2xl sm:block sm:border-0 sm:p-0 sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none"
     id="main-menu"
   >
     <ul class="sm:flex gap-2">
       {
         navLinks.map((link) => (
-          <li class="relative">
+          <li class="relative group">
             <a
-              class={`font-medium text-sm p-2 block hover:text-white duration-500 transition-all nav-item relative after:absolute after:opacity-0 after:content-['•'] after:w-1 after:h-2 after:bottom-0 after:left-2/4 after:-translate-x-2/4  after:text-primary`}
+              class={`font-medium text-sm p-2 block hover:text-white duration-300 transition-all nav-item relative after:absolute after:opacity-0 after:content-['•'] after:w-1 after:h-2 after:bottom-0 after:left-2/4 after:-translate-x-2/4 after:text-primary after:transition-opacity after:duration-300 before:absolute before:inset-0 before:bg-primary/10 before:rounded-lg before:scale-0 before:transition-transform before:duration-300 group-hover:before:scale-100`}
               href={link.href}
             >
               {link.text}

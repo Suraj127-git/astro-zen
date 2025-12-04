@@ -11,45 +11,61 @@ const { projects } = Astro.props;
 ---
 
 <Section text="Featured Projects" href="projects">
-  <div class="relative overflow-hidden">
-    <div id="project-carousel" class="flex snap-x snap-mandatory overflow-x-auto gap-8 pb-8 hide-scrollbar">
+  <div class="relative overflow-hidden py-8">
+    <!-- Gradient overlays -->
+    <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none hidden md:block"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none hidden md:block"></div>
+
+    <div id="project-carousel" class="flex snap-x snap-mandatory overflow-x-auto gap-8 pb-8 px-4 hide-scrollbar">
       {projects.map(({ name, summary, image, linkPreview, linkSource }, index) => {
-        const top = 98 + index * 40;
         return (
-          <div style={`top: ${top}px;`} class="project-slide snap-center flex-shrink-0 w-[90%] md:w-[600px]">
-            <div class="rounded-2xl border border-neutral/20 bg-black project-card">
-              <div class="w-full h-[580px] md:h-96 relative z-[1] bg-[#1c232d]/85 bg-difu before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[5%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2">
-                <div class="px-6 pt-12 project-content">
-                  <h3 class="text-3xl font-medium font-serif mb-5 text-primary project-title">
-                    {name}
-                  </h3>
-                  <p class="text-neutral text-base project-summary">{summary}</p>
-                  <div class="pt-10 flex gap-5 text-white project-links">
+          <div class="project-slide snap-center flex-shrink-0 w-[90%] md:w-[600px] lg:w-[700px]">
+            <div class="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm project-card overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 h-full">
+              <div class="w-full h-[580px] md:h-[450px] relative z-[1] bg-[#1c232d]/85 before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[3%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 overflow-hidden">
+                <div class="px-6 md:px-8 pt-8 md:pt-12 project-content flex flex-col justify-between">
+                  <div>
+                    <div class="mb-4 inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-medium">
+                      PROJECT {String(index + 1).padStart(2, '0')}
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-medium font-serif mb-4 text-white group-hover:text-primary transition-colors duration-300 project-title">
+                      {name}
+                    </h3>
+                    <p class="text-neutral text-sm md:text-base leading-relaxed project-summary">{summary}</p>
+                  </div>
+                  <div class="pt-6 flex gap-4 text-white project-links">
                     <a
                       href={linkPreview}
                       target="_blank"
-                      class="preview-link hover:underline after:content-[url(/external.svg)] after:relative after:bottom-[-5px]"
+                      class="group/link px-5 py-2.5 rounded-full bg-primary/10 border border-primary/30 hover:bg-primary hover:border-primary text-primary hover:text-white transition-all duration-300 text-sm font-medium inline-flex items-center gap-2"
                     >
-                      Preview
+                      <span>Preview</span>
+                      <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                      </svg>
                     </a>
                     {linkSource && (
                       <a
                         href={linkSource}
                         target="_blank"
-                        class="source-link hover:underline after:content-[url(/external.svg)] after:relative after:bottom-[-5px]"
+                        class="group/link px-5 py-2.5 rounded-full border border-white/20 hover:border-white/40 text-white/70 hover:text-white transition-all duration-300 text-sm font-medium inline-flex items-center gap-2"
                       >
-                        GitHub
+                        <span>GitHub</span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.430.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
                       </a>
                     )}
                   </div>
                 </div>
-                <div class="flex items-end justify-end overflow-hidden project-image-wrapper">
+                <div class="flex items-center justify-center overflow-hidden project-image-wrapper relative">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
                   <Image
                     src={image}
-                    width={580}
-                    height={580}
+                    width={700}
+                    height={700}
                     alt={name}
-                    class="object-cover rounded-br-2xl project-image"
+                    class="object-cover w-full h-full project-image transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -59,23 +75,34 @@ const { projects } = Astro.props;
       })}
     </div>
     <button
-      class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/75 transition-colors z-10"
-      onclick="document.getElementById('project-carousel').scrollBy({left: -300, behavior: 'smooth'})"
+      id="project-prev"
+      class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-white/10 hover:border-primary shadow-lg"
     >
       <span class="sr-only">Previous</span>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
       </svg>
     </button>
     <button
-      class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/75 transition-colors z-10"
-      onclick="document.getElementById('project-carousel').scrollBy({left: 300, behavior: 'smooth'})"
+      id="project-next"
+      class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-white/10 hover:border-primary shadow-lg"
     >
       <span class="sr-only">Next</span>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
       </svg>
     </button>
+
+    <!-- Progress dots -->
+    <div class="flex justify-center gap-2 mt-8 project-dots">
+      {projects.map((_, index) => (
+        <button
+          class="w-2 h-2 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300 project-dot"
+          data-index={index}
+          aria-label={`Go to project ${index + 1}`}
+        ></button>
+      ))}
+    </div>
   </div>
 </Section>
 
@@ -83,16 +110,77 @@ const { projects } = Astro.props;
   async function initProjectAnimations() {
     const gsap = (await import('gsap')).default;
     const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
-    
+
     gsap.registerPlugin(ScrollTrigger);
+
+    const projectCarousel = document.getElementById('project-carousel') as HTMLElement;
+    const prevBtn = document.getElementById('project-prev');
+    const nextBtn = document.getElementById('project-next');
+    const dots = document.querySelectorAll('.project-dot');
+
+    if (!projectCarousel) return;
+
+    let currentIndex = 0;
+    const projects = document.querySelectorAll('.project-slide');
+    const totalProjects = projects.length;
+
+    // Update active dot
+    function updateDots() {
+      dots.forEach((dot, index) => {
+        if (index === currentIndex) {
+          gsap.to(dot, { scale: 1.5, backgroundColor: "#3b82f6", duration: 0.3 });
+        } else {
+          gsap.to(dot, { scale: 1, backgroundColor: "rgba(255,255,255,0.2)", duration: 0.3 });
+        }
+      });
+    }
+
+    // Scroll to project
+    function scrollToProject(index: number) {
+      const project = projects[index] as HTMLElement;
+      if (project) {
+        const scrollLeft = project.offsetLeft - (projectCarousel.clientWidth - project.clientWidth) / 2;
+        projectCarousel.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        currentIndex = index;
+        updateDots();
+      }
+    }
+
+    // Navigation buttons
+    prevBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalProjects) % totalProjects;
+      scrollToProject(currentIndex);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalProjects;
+      scrollToProject(currentIndex);
+    });
+
+    // Dot navigation
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => scrollToProject(index));
+    });
+
+    // Update current index based on scroll position
+    projectCarousel.addEventListener('scroll', () => {
+      const scrollLeft = projectCarousel.scrollLeft;
+      const projectWidth = (projects[0] as HTMLElement).offsetWidth + 32; // including gap
+      const newIndex = Math.round(scrollLeft / projectWidth);
+      if (newIndex !== currentIndex && newIndex < totalProjects) {
+        currentIndex = newIndex;
+        updateDots();
+      }
+    });
 
     // Initial animation for visible projects
     function animateProject(project: HTMLElement) {
       const tl = gsap.timeline();
-      
+
       tl.from(project, {
         opacity: 0,
-        scale: 0.9,
+        y: 50,
+        scale: 0.95,
         duration: 0.8,
         ease: "power3.out"
       })
@@ -107,17 +195,18 @@ const { projects } = Astro.props;
         duration: 0.6
       }, "-=0.3")
       .from(project.querySelector('.project-image'), {
-        scale: 1.2,
+        scale: 1.3,
         opacity: 0,
-        duration: 0.8,
+        duration: 1,
         ease: "power2.out"
       }, "-=0.6")
       .from(project.querySelectorAll('.project-links a'), {
         y: 20,
         opacity: 0,
+        scale: 0,
         stagger: 0.1,
         duration: 0.4,
-        ease: "back.out(1.7)"
+        ease: "back.out(2)"
       }, "-=0.4");
     }
 
@@ -129,69 +218,66 @@ const { projects } = Astro.props;
           projectObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.3 });
 
-    document.querySelectorAll('.project-slide').forEach(project => {
-      projectObserver.observe(project);
-    });
+    projects.forEach(project => projectObserver.observe(project));
 
-    // Hover effects
+    // 3D hover effects on cards
     document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card.querySelector('.project-image'), {
-          scale: 1.05,
-          duration: 0.4
-        });
-        gsap.to(card.querySelector('.project-title'), {
-          color: "#60A5FA",
-          duration: 0.3
+      card.addEventListener('mousemove', function(e) {
+        const rect = (this as HTMLElement).getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+
+        gsap.to(this, {
+          rotationX: rotateX,
+          rotationY: rotateY,
+          duration: 0.3,
+          ease: "power2.out",
+          transformPerspective: 1000
         });
       });
 
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card.querySelector('.project-image'), {
-          scale: 1,
-          duration: 0.4
-        });
-        gsap.to(card.querySelector('.project-title'), {
-          color: "#3b82f6",
-          duration: 0.3
+      card.addEventListener('mouseleave', function() {
+        gsap.to(this, {
+          rotationX: 0,
+          rotationY: 0,
+          duration: 0.4,
+          ease: "power2.out"
         });
       });
     });
-  }
 
-  document.addEventListener('DOMContentLoaded', initProjectAnimations);
+    // Auto-scroll (pause on hover)
+    let autoScrollInterval: number;
+    const autoScrollDelay = 5000;
 
-  const projectCarousel = document.getElementById('project-carousel') as HTMLElement;
-  let projectScrollInterval: number;
-  const scrollAmount = 300;
-  const scrollInterval = 3000;
-
-  if (projectCarousel) {
-    function startProjectAutoScroll(): void {
-      projectScrollInterval = window.setInterval(() => {
-        const maxScroll = projectCarousel.scrollWidth - projectCarousel.clientWidth;
-        const newScrollPosition = projectCarousel.scrollLeft + scrollAmount;
-        
-        if (newScrollPosition >= maxScroll) {
-          projectCarousel.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          projectCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-      }, scrollInterval);
+    function startAutoScroll() {
+      autoScrollInterval = window.setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalProjects;
+        scrollToProject(currentIndex);
+      }, autoScrollDelay);
     }
 
     projectCarousel.addEventListener('mouseenter', () => {
-      window.clearInterval(projectScrollInterval);
+      window.clearInterval(autoScrollInterval);
     });
 
     projectCarousel.addEventListener('mouseleave', () => {
-      startProjectAutoScroll();
+      startAutoScroll();
     });
 
-    startProjectAutoScroll();
+    updateDots();
+    startAutoScroll();
   }
+
+  document.addEventListener('DOMContentLoaded', initProjectAnimations);
 </script>
 
 <style>
@@ -201,5 +287,9 @@ const { projects } = Astro.props;
   }
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .project-card {
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 </style>

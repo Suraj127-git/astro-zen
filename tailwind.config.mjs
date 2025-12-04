@@ -37,12 +37,52 @@ export default {
       },
       keyframes: {
         slideIn: {
-          "10%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(0)" },
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        fadeInUp: {
+          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        scaleIn: {
+          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        glow: {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(37, 99, 235, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(37, 99, 235, 0.6)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-1000px 0" },
+          "100%": { backgroundPosition: "1000px 0" },
         },
       },
       animation: {
         slideIn: "slideIn 600ms ease both",
+        fadeInUp: "fadeInUp 800ms ease-out both",
+        scaleIn: "scaleIn 600ms ease-out both",
+        float: "float 3s ease-in-out infinite",
+        glow: "glow 2s ease-in-out infinite",
+        shimmer: "shimmer 3s linear infinite",
+      },
+      backdropBlur: {
+        xs: "2px",
+      },
+      boxShadow: {
+        glow: "0 0 20px rgba(37, 99, 235, 0.5)",
+        "glow-lg": "0 0 40px rgba(37, 99, 235, 0.6)",
+      },
+      transitionDuration: {
+        2000: "2000ms",
+        3000: "3000ms",
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },
