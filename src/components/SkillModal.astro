@@ -1,0 +1,134 @@
+---
+// Modal component for displaying skill details
+---
+
+<div id="skill-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+  <div class="modal-content relative max-w-2xl w-full bg-gradient-to-br from-black/90 to-black/70 rounded-2xl border border-primary/30 p-8 md:p-10 shadow-2xl shadow-primary/20">
+    <!-- Close button -->
+    <button
+      id="close-modal"
+      class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/50 transition-all duration-300 group"
+      aria-label="Close modal"
+    >
+      <svg class="w-5 h-5 text-neutral group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Modal header -->
+    <div class="mb-6">
+      <h3 id="modal-skill-name" class="text-4xl md:text-5xl font-bold text-primary mb-2 font-serif"></h3>
+      <div class="w-20 h-1 bg-gradient-to-r from-primary to-blue-400"></div>
+    </div>
+
+    <!-- Modal content -->
+    <div class="space-y-6">
+      <div>
+        <h4 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          What is it?
+        </h4>
+        <p id="modal-skill-description" class="text-neutral/90 leading-relaxed text-base md:text-lg"></p>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          My Experience
+        </h4>
+        <p id="modal-skill-experience" class="text-neutral/90 leading-relaxed text-base md:text-lg"></p>
+      </div>
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-primary/30 rounded-tl-2xl"></div>
+    <div class="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-primary/30 rounded-br-2xl"></div>
+  </div>
+</div>
+
+<script>
+  function initSkillModal() {
+    const modal = document.getElementById('skill-modal');
+    const closeBtn = document.getElementById('close-modal');
+    const modalContent = modal?.querySelector('.modal-content');
+
+    if (!modal || !closeBtn || !modalContent) return;
+
+    // Close modal function
+    function closeModal() {
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close on button click
+    closeBtn.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('flex')) {
+        closeModal();
+      }
+    });
+
+    // Prevent click propagation on modal content
+    modalContent.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Make closeModal available globally
+    (window as any).closeSkillModal = closeModal;
+  }
+
+  // Initialize modal
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSkillModal);
+  } else {
+    initSkillModal();
+  }
+</script>
+
+<style>
+  #skill-modal {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  #skill-modal.flex {
+    display: flex !important;
+  }
+
+  .modal-content {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

@@ -151,16 +151,7 @@ const { description, name } = Astro.props;
         }, "-=0.2");
       }
 
-      // Floating animation for card
-      if (card) {
-        gsap.to(card, {
-          y: -10,
-          duration: 3,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut"
-        });
-      }
+      // Removed floating animation for cleaner appearance
 
       // Glow effect on hover for hashtags
       hashtags.forEach(tag => {
@@ -182,22 +173,7 @@ const { description, name } = Astro.props;
         });
       });
 
-      // Parallax effect on about card
-      if (card) {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            gsap.to(card, {
-              y: progress * -30,
-              ease: "none"
-            });
-          }
-        });
-      }
+      // Removed parallax effect for cleaner appearance
     } catch (error) {
       console.error('About animation failed:', error);
       // Ensure all about content is visible even if animation fails

@@ -1,8 +1,9 @@
 ---
 import Section from "./Section.astro";
+import SkillModal from "./SkillModal.astro";
 import { SITE_CONTENT } from "@config";
 
-const { row1, row2 } = SITE_CONTENT.skills;
+const { row1, row2, details } = SITE_CONTENT.skills;
 ---
 
 <Section text="Experience Skills" href="skills">
@@ -40,7 +41,10 @@ const { row1, row2 } = SITE_CONTENT.skills;
   </div>
 </Section>
 
-<script>
+<!-- Include the modal -->
+<SkillModal />
+
+<script is:inline define:vars={{ skillDetails: details }}>
   async function initSkillsAnimation() {
     try {
       const gsap = (await import('gsap')).default;
@@ -135,6 +139,14 @@ const { row1, row2 } = SITE_CONTENT.skills;
             transformPerspective: 1000
           });
         });
+
+        // Click handler to open modal
+        item.addEventListener('click', function() {
+          const skillName = this.getAttribute('data-skill');
+          if (skillName) {
+            openSkillModal(skillName);
+          }
+        });
       });
 
       // Entrance animation with visibility safeguard
@@ -164,6 +176,33 @@ const { row1, row2 } = SITE_CONTENT.skills;
       });
     }
   }
+
+  // Function to open modal with skill details
+  function openSkillModal(skillName: string) {
+    const modal = document.getElementById('skill-modal');
+    const modalSkillName = document.getElementById('modal-skill-name');
+    const modalSkillDescription = document.getElementById('modal-skill-description');
+    const modalSkillExperience = document.getElementById('modal-skill-experience');
+
+    if (!modal || !modalSkillName || !modalSkillDescription || !modalSkillExperience) return;
+
+    // Find skill details
+    const skill = skillDetails.find((s: any) => s.name === skillName);
+
+    if (skill) {
+      modalSkillName.textContent = skill.name;
+      modalSkillDescription.textContent = skill.description;
+      modalSkillExperience.textContent = skill.experience || 'No specific experience details available.';
+
+      // Show modal
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Make function globally available
+  (window as any).openSkillModal = openSkillModal;
 
   // Initialize immediately if DOM is ready
   if (document.readyState === 'loading') {

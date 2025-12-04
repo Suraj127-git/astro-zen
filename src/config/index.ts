@@ -46,7 +46,79 @@ export const SITE_CONTENT: SiteContent = {
   },
   skills: {
     row1: ["LARAVEL", "PHP", "PYTHON", "JAVASCRIPT", "REACTJS", "NODEJS", "TYPESCRIPT"],
-    row2: ["RABBITMQ", "REDIS", "DOCKER", "KUBERNETES", "AWS", "MONGODB", "MYSQL"]
+    row2: ["RABBITMQ", "REDIS", "DOCKER", "KUBERNETES", "AWS", "MONGODB", "MYSQL"],
+    details: [
+      {
+        name: "LARAVEL",
+        description: "Professional PHP framework for building robust web applications with elegant syntax and powerful features.",
+        experience: "Built complete backend architecture for Sartch Product (recharge and utility payments) at Pay1. Implemented design patterns for code optimization and maintainability, achieving 20% load time improvement through query optimization and cache management."
+      },
+      {
+        name: "PHP",
+        description: "Server-side scripting language used for building dynamic web applications and RESTful APIs.",
+        experience: "4+ years of professional experience designing and developing backend applications. Worked with Laravel framework to create scalable server-side solutions and integrated API endpoints with front-end applications."
+      },
+      {
+        name: "PYTHON",
+        description: "Versatile programming language used for backend development, data analysis, and automation.",
+        experience: "Exploring GenAI and LLMs using Python. Building automation scripts and working on data analysis projects to expand capabilities in AI-powered solutions."
+      },
+      {
+        name: "JAVASCRIPT",
+        description: "Core language for web development, enabling dynamic and interactive user experiences.",
+        experience: "Used extensively for front-end integration and working with modern frameworks. Currently enhancing skills with ReactJS and Astro.js to create seamless full-stack solutions."
+      },
+      {
+        name: "REACTJS",
+        description: "Popular JavaScript library for building user interfaces with component-based architecture.",
+        experience: "Actively learning and implementing React for front-end development. Started working with ReactJS at BDM INFOTECH for building admin panels and modern web interfaces."
+      },
+      {
+        name: "NODEJS",
+        description: "JavaScript runtime for building scalable server-side applications and APIs.",
+        experience: "Implemented Node.js for backend services and API development. Experience with building microservices and real-time applications using modern JavaScript."
+      },
+      {
+        name: "TYPESCRIPT",
+        description: "Typed superset of JavaScript that adds static typing for more robust code.",
+        experience: "Currently enhancing skills in TypeScript for building type-safe applications. Using it with React and Astro.js to create maintainable and scalable code."
+      },
+      {
+        name: "RABBITMQ",
+        description: "Message broker for handling asynchronous communication between microservices.",
+        experience: "Implemented RabbitMQ for queue management and asynchronous task processing at iThink Logistics. Used for handling high-volume message processing and improving system reliability."
+      },
+      {
+        name: "REDIS",
+        description: "In-memory data structure store used for caching, session management, and real-time analytics.",
+        experience: "Implemented Redis for queue management, locking mechanisms, and caching at Pay1 and iThink Logistics. Achieved 20% performance improvement through effective cache management strategies."
+      },
+      {
+        name: "DOCKER",
+        description: "Containerization platform for building, shipping, and running applications in isolated environments.",
+        experience: "Started working with Docker at BDM INFOTECH and continued using it for containerizing applications. Implemented Docker for microservices architecture and development environment consistency."
+      },
+      {
+        name: "KUBERNETES",
+        description: "Container orchestration platform for automating deployment, scaling, and management of applications.",
+        experience: "Working on Kubernetes for orchestrating containerized applications and managing microservices at scale. Part of DevOps skill enhancement journey."
+      },
+      {
+        name: "AWS",
+        description: "Cloud computing platform offering scalable infrastructure and services for application deployment.",
+        experience: "Experience deploying and managing applications on AWS. Working on cloud infrastructure and exploring various AWS services for scalable application deployment."
+      },
+      {
+        name: "MONGODB",
+        description: "NoSQL database for storing and managing unstructured data with flexible schema design.",
+        experience: "Used MongoDB for projects requiring flexible data models and scalable document storage. Experience with database design and query optimization for NoSQL databases."
+      },
+      {
+        name: "MYSQL",
+        description: "Relational database management system for structured data storage and complex queries.",
+        experience: "Extensive experience with MySQL at iThink Logistics and Pay1. Designed database schemas, wrote optimized queries, and implemented database performance improvements. Integrated MySQL with web applications for robust data management."
+      }
+    ]
   },
   experience: [
         {
