@@ -50,11 +50,11 @@
   </div>
 </div>
 
-<script>
+<script is:inline>
   function initSkillModal() {
     const modal = document.getElementById('skill-modal');
     const closeBtn = document.getElementById('close-modal');
-    const modalContent = modal?.querySelector('.modal-content');
+    const modalContent = modal ? modal.querySelector('.modal-content') : null;
 
     if (!modal || !closeBtn || !modalContent) return;
 
@@ -69,26 +69,26 @@
     closeBtn.addEventListener('click', closeModal);
 
     // Close on backdrop click
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener('click', function(e) {
       if (e.target === modal) {
         closeModal();
       }
     });
 
     // Close on ESC key
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && modal.classList.contains('flex')) {
         closeModal();
       }
     });
 
     // Prevent click propagation on modal content
-    modalContent.addEventListener('click', (e) => {
+    modalContent.addEventListener('click', function(e) {
       e.stopPropagation();
     });
 
     // Make closeModal available globally
-    (window as any).closeSkillModal = closeModal;
+    window.closeSkillModal = closeModal;
   }
 
   // Initialize modal

@@ -1,10 +1,10 @@
 ---
 import Section from "./Section.astro";
-import type { AboutProps, HeroProps } from "@types";
+import type { AboutProps } from "@types";
 
-type Props = AboutProps & Pick<HeroProps, "name">;
+type Props = AboutProps;
 
-const { description, name } = Astro.props;
+const { description } = Astro.props;
 ---
 
 <Section text="About Me" href="about">
