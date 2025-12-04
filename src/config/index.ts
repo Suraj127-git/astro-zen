@@ -28,10 +28,21 @@ export const SITE_CONFIG: SiteConfig = {
 export const SITE_CONTENT: SiteContent = {
   hero: {
     name: "Suraj Shetty",
-    specialty: "Software Engineer",
+    specialty: "Backend Software Engineer",
+    tagline: "Building scalable, high-performance systems that power modern applications",
     summary:
-      "I am a backend software engineer passionate about building scalable applications using laravel and exploring GenAI and LLMs. Currently, I'm enhancing my skills in DevOps and front-end technologies like Astro.js and ReactJS to create seamless, innovative solutions.",
+      "Specialized in architecting backend solutions with Laravel, PHP, and microservices. Proven track record of optimizing system performance by 20%+ and delivering enterprise-grade applications. Currently exploring GenAI/LLMs and expanding into full-stack capabilities with React and modern DevOps practices.",
     email: "shetty44444@gmail.com",
+    availability: {
+      status: "available",
+      text: "Open to new opportunities"
+    },
+    stats: [
+      { value: "4+", label: "Years Experience" },
+      { value: "20%", label: "Performance Gains" },
+      { value: "10+", label: "Technologies" },
+      { value: "3", label: "Companies" }
+    ]
   },
   skills: {
     row1: ["LARAVEL", "PHP", "PYTHON", "JAVASCRIPT", "REACTJS", "NODEJS", "TYPESCRIPT"],

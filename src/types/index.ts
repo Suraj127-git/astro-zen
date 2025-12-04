@@ -25,6 +25,15 @@ export interface HeroProps {
   specialty: string;
   summary: string;
   email: string;
+  tagline?: string;
+  stats?: {
+    label: string;
+    value: string;
+  }[];
+  availability?: {
+    status: string;
+    text: string;
+  };
 }
 
 export interface ExperienceProps {
