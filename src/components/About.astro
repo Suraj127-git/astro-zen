@@ -125,7 +125,7 @@ const { description, name } = Astro.props;
     // Glow effect on hover for hashtags
     const hashtags = document.querySelectorAll('.hashtag');
     hashtags.forEach(tag => {
-      tag.addEventListener('mouseenter', function() {
+      tag.addEventListener('mouseenter', function(this: HTMLElement) {
         gsap.to(this, {
           scale: 1.1,
           boxShadow: "0 0 20px rgba(37, 99, 235, 0.5)",
@@ -134,7 +134,7 @@ const { description, name } = Astro.props;
         });
       });
 
-      tag.addEventListener('mouseleave', function() {
+      tag.addEventListener('mouseleave', function(this: HTMLElement) {
         gsap.to(this, {
           scale: 1,
           boxShadow: "0 0 0px rgba(37, 99, 235, 0)",

@@ -166,7 +166,7 @@ const { name, specialty, summary, email } = Astro.props;
     // Magnetic effect on buttons
     const buttons = document.querySelectorAll('.hero-cta, .hero-secondary-cta');
     buttons.forEach(button => {
-      button.addEventListener('mouseenter', function(e) {
+      button.addEventListener('mouseenter', function() {
         gsap.to(this, {
           scale: 1.05,
           duration: 0.3,
@@ -174,7 +174,7 @@ const { name, specialty, summary, email } = Astro.props;
         });
       });
 
-      button.addEventListener('mouseleave', function(e) {
+      button.addEventListener('mouseleave', function() {
         gsap.to(this, {
           scale: 1,
           x: 0,
@@ -184,7 +184,7 @@ const { name, specialty, summary, email } = Astro.props;
         });
       });
 
-      button.addEventListener('mousemove', function(e) {
+      button.addEventListener('mousemove', function(e: MouseEvent) {
         const rect = this.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;

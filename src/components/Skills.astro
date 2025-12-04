@@ -90,7 +90,7 @@ const { row1, row2 } = SITE_CONTENT.skills;
     // 3D hover effect on individual skills
     const skillItems = document.querySelectorAll('.skill-item');
     skillItems.forEach(item => {
-      item.addEventListener('mouseenter', function(e) {
+      item.addEventListener('mouseenter', function() {
         gsap.to(this, {
           scale: 1.1,
           rotationY: 5,
@@ -100,7 +100,7 @@ const { row1, row2 } = SITE_CONTENT.skills;
         });
       });
 
-      item.addEventListener('mouseleave', function(e) {
+      item.addEventListener('mouseleave', function() {
         gsap.to(this, {
           scale: 1,
           rotationY: 0,
@@ -111,7 +111,7 @@ const { row1, row2 } = SITE_CONTENT.skills;
       });
 
       // 3D tilt effect based on mouse position
-      item.addEventListener('mousemove', function(e) {
+      item.addEventListener('mousemove', function(e: MouseEvent) {
         const rect = this.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;

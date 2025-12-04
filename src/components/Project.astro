@@ -224,7 +224,7 @@ const { projects } = Astro.props;
 
     // 3D hover effects on cards
     document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('mousemove', function(e) {
+      card.addEventListener('mousemove', function(e: MouseEvent) {
         const rect = (this as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
