@@ -1,0 +1,48 @@
+:root {
+  /* Light Mode */
+  --color-bg: 255 255 255; /* #ffffff */
+  --color-text: 15 23 42; /* slate-900 */
+  --color-primary: 37 99 235; /* #2563EB */
+  --color-secondary: 100 116 139; /* slate-500 */
+  --color-accent: 59 130 246; /* blue-500 */
+  --color-border: 226 232 240; /* slate-200 */
+  --color-card-bg: 248 250 252; /* slate-50 */
+  --color-overlay: 255 255 255;
+}
+
+.dark {
+  /* Dark Mode */
+  --color-bg: 14 20 27; /* #0E141B */
+  --color-text: 241 245 249; /* slate-100 */
+  --color-primary: 59 130 246; /* #3B82F6 */
+  --color-secondary: 148 163 184; /* slate-400 */
+  --color-accent: 96 165 250; /* blue-400 */
+  --color-border: 255 255 255; /* white with low opacity usually */
+  --color-card-bg: 23 30 41; /* custom dark */
+  --color-overlay: 14 20 27;
+}
+
+/* Base styles */
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-bg));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-secondary));
+  border-radius: 5px;
+  border: 2px solid rgb(var(--color-bg));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-primary));
+}

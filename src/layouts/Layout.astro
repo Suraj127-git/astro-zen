@@ -3,6 +3,7 @@ import Header from "@components/Header.astro";
 import Loader from "@components/Loader.astro";
 import "@fontsource/be-vietnam-pro";
 import "@fontsource-variable/gabarito";
+import "../styles/global.css";
 import { SITE_CONFIG } from "@config";
 import Footer from "@components/Footer.astro";
 
@@ -32,9 +33,6 @@ const ogImgUrl = canonicalURL + socialImage;
     <meta name="generator" content={Astro.generator} />
 
     <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-
     <title>{title}</title>
 
     <meta property="og:title" content={title} />
@@ -47,8 +45,38 @@ const ogImgUrl = canonicalURL + socialImage;
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImgUrl} />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": author,
+      "url": canonicalURL,
+      "sameAs": socialLinks.map(link => link.href),
+      "jobTitle": "Software Engineer",
+      "description": description,
+      "image": ogImgUrl
+    })} />
+
+    <script is:inline>
+      // Theme initialization
+      const theme = (() => {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      window.localStorage.setItem("theme", theme);
+    </script>
   </head>
-  <body class="font-sans bg-black overflow-x-hidden">
+  <body class="font-sans bg-bg text-text overflow-x-hidden transition-colors duration-300">
     <Loader />
 
     <!-- Custom cursor -->

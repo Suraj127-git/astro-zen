@@ -17,18 +17,18 @@ const { blog } = Astro.props;
       return (
         <div
           style={`top: ${top}px;`}
-          class="group sticky rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm mb-12 blog-card overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500"
+          class="group sticky rounded-2xl border border-border bg-gradient-to-br from-card-bg to-transparent backdrop-blur-sm mb-12 blog-card overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500"
         >
-          <div class="w-full h-[580px] md:h-[420px] relative z-[1] bg-[#1c232d]/85 before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[3%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 overflow-hidden">
+          <div class="w-full h-[580px] md:h-[420px] relative z-[1] bg-overlay/85 before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[5%] dark:before:opacity-[3%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 overflow-hidden">
             <div class="px-6 md:px-8 pt-8 md:pt-12 blog-content flex flex-col justify-between">
               <div>
                 <div class="mb-4 inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-medium">
                   BLOG POST {String(index + 1).padStart(2, '0')}
                 </div>
-                <h3 class="text-2xl md:text-3xl font-medium font-serif mb-4 text-white group-hover:text-primary transition-colors duration-300 blog-title">
+                <h3 class="text-2xl md:text-3xl font-medium font-serif mb-4 text-text group-hover:text-primary transition-colors duration-300 blog-title">
                   {name}
                 </h3>
-                <p class="text-neutral text-sm md:text-base leading-relaxed blog-summary">{summary}</p>
+                <p class="text-secondary text-sm md:text-base leading-relaxed blog-summary">{summary}</p>
               </div>
               <div class="pt-6">
                 <a
@@ -44,7 +44,7 @@ const { blog } = Astro.props;
               </div>
             </div>
             <div class="flex items-center justify-center overflow-hidden blog-image-container relative">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-bg/50 to-transparent z-10"></div>
               <Image
                 src={image}
                 width={700}
@@ -64,12 +64,15 @@ const { blog } = Astro.props;
 <script>
   async function initBlogAnimations() {
     try {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
       const gsap = (await import('gsap')).default;
       const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      document.querySelectorAll('.blog-card').forEach((card, index) => {
+      document.querySelectorAll('.blog-card').forEach((card) => {
         // Ensure all blog content is visible by default
         const title = card.querySelector('.blog-title');
         const summary = card.querySelector('.blog-summary');

@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer
-  class="text-white w-full text-center pb-8 pt-5 px-5 border-t border-neutral/20"
+  class="text-secondary w-full text-center pb-8 pt-5 px-5 border-t border-border"
 >
   <ul class="flex flex-wrap gap-x-5 justify-center mb-5 text-xs">
     {
@@ -17,16 +17,19 @@ const currentYear = new Date().getFullYear();
           <a
             href={href}
             target="_blank"
-            class="hover:text-primary inline-block py-3 px-4 after:relative after:bottom-[-4px] after:content-[url(/external.svg)]"
+            class="hover:text-primary inline-flex items-center gap-1 py-3 px-4 transition-colors"
           >
             {text}
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+              <path d="M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z"></path>
+            </svg>
           </a>
         </li>
       ))
     }
   </ul>
   <p class="text-xs">
-    {author} © {currentYear}. <span class="text-neutral"
+    {author} © {currentYear}. <span class="text-secondary"
       >Designed & Developed by</span
     > Moisés Machuca
   </p>

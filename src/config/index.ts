@@ -1,4 +1,10 @@
 import type { SiteConfig, SiteContent } from "../types";
+import alejandroSmall from "../assets/alejandro-small.jpg";
+import hashnode from "../assets/hashnode-1.webp";
+import medium from "../assets/medium-1.webp";
+import shopify from "../assets/shopify-clon.png";
+import cloneIg from "../assets/clone-ig.png";
+import spotifu from "../assets/spotifu.png";
 
 export const SITE_CONFIG: SiteConfig = {
   title: "Suraj Shetty — Software Developer",
@@ -6,7 +12,7 @@ export const SITE_CONFIG: SiteConfig = {
   description:
     "Software Engineer based in San Francisco, USA. I specialize in UI design, web and mobile application development and maintenance.",
   lang: "en",
-  siteLogo: "/alejandro-small.jpg",
+  siteLogo: alejandroSmall,
   navLinks: [
     { text: "Experience", href: "#experience" },
     { text: "Skills", href: "#skills" },
@@ -45,78 +51,132 @@ export const SITE_CONTENT: SiteContent = {
     ]
   },
   skills: {
-    row1: ["LARAVEL", "PHP", "PYTHON", "JAVASCRIPT", "REACTJS", "NODEJS", "TYPESCRIPT"],
-    row2: ["RABBITMQ", "REDIS", "DOCKER", "KUBERNETES", "AWS", "MONGODB", "MYSQL"],
+    categories: [
+      {
+        title: "DevOps & Cloud",
+        skills: ["AWS", "DOCKER", "KUBERNETES", "RABBITMQ", "REDIS"]
+      },
+      {
+        title: "Backend Development",
+        skills: ["LARAVEL", "PHP", "NODEJS", "PYTHON", "MYSQL", "MONGODB"]
+      },
+      {
+        title: "Frontend Development",
+        skills: ["REACTJS", "JAVASCRIPT", "TYPESCRIPT", "ASTRO"]
+      },
+      {
+        title: "Generative AI",
+        skills: ["LANGCHAIN", "OPENAI", "HUGGINGFACE"]
+      }
+    ],
     details: [
       {
         name: "LARAVEL",
         description: "Professional PHP framework for building robust web applications with elegant syntax and powerful features.",
-        experience: "Built complete backend architecture for Sartch Product (recharge and utility payments) at Pay1. Implemented design patterns for code optimization and maintainability, achieving 20% load time improvement through query optimization and cache management."
+        experience: "Built complete backend architecture for Sartch Product (recharge and utility payments) at Pay1. Implemented design patterns for code optimization and maintainability, achieving 20% load time improvement.",
+        level: 95
       },
       {
         name: "PHP",
         description: "Server-side scripting language used for building dynamic web applications and RESTful APIs.",
-        experience: "4+ years of professional experience designing and developing backend applications. Worked with Laravel framework to create scalable server-side solutions and integrated API endpoints with front-end applications."
+        experience: "4+ years of professional experience designing and developing backend applications. Worked with Laravel framework to create scalable server-side solutions.",
+        level: 90
       },
       {
         name: "PYTHON",
         description: "Versatile programming language used for backend development, data analysis, and automation.",
-        experience: "Exploring GenAI and LLMs using Python. Building automation scripts and working on data analysis projects to expand capabilities in AI-powered solutions."
+        experience: "Exploring GenAI and LLMs using Python. Building automation scripts and working on data analysis projects to expand capabilities in AI-powered solutions.",
+        level: 85
       },
       {
         name: "JAVASCRIPT",
         description: "Core language for web development, enabling dynamic and interactive user experiences.",
-        experience: "Used extensively for front-end integration and working with modern frameworks. Currently enhancing skills with ReactJS and Astro.js to create seamless full-stack solutions."
+        experience: "Used extensively for front-end integration and working with modern frameworks. Currently enhancing skills with ReactJS and Astro.js.",
+        level: 88
       },
       {
         name: "REACTJS",
         description: "Popular JavaScript library for building user interfaces with component-based architecture.",
-        experience: "Actively learning and implementing React for front-end development. Started working with ReactJS at BDM INFOTECH for building admin panels and modern web interfaces."
+        experience: "Actively learning and implementing React for front-end development. Started working with ReactJS at BDM INFOTECH for building admin panels.",
+        level: 80
       },
       {
         name: "NODEJS",
         description: "JavaScript runtime for building scalable server-side applications and APIs.",
-        experience: "Implemented Node.js for backend services and API development. Experience with building microservices and real-time applications using modern JavaScript."
+        experience: "Implemented Node.js for backend services and API development. Experience with building microservices and real-time applications.",
+        level: 85
       },
       {
         name: "TYPESCRIPT",
         description: "Typed superset of JavaScript that adds static typing for more robust code.",
-        experience: "Currently enhancing skills in TypeScript for building type-safe applications. Using it with React and Astro.js to create maintainable and scalable code."
+        experience: "Currently enhancing skills in TypeScript for building type-safe applications. Using it with React and Astro.js.",
+        level: 82
       },
       {
         name: "RABBITMQ",
         description: "Message broker for handling asynchronous communication between microservices.",
-        experience: "Implemented RabbitMQ for queue management and asynchronous task processing at iThink Logistics. Used for handling high-volume message processing and improving system reliability."
+        experience: "Implemented RabbitMQ for queue management and asynchronous task processing at iThink Logistics.",
+        level: 85
       },
       {
         name: "REDIS",
         description: "In-memory data structure store used for caching, session management, and real-time analytics.",
-        experience: "Implemented Redis for queue management, locking mechanisms, and caching at Pay1 and iThink Logistics. Achieved 20% performance improvement through effective cache management strategies."
+        experience: "Implemented Redis for queue management, locking mechanisms, and caching. Achieved 20% performance improvement.",
+        level: 88
       },
       {
         name: "DOCKER",
         description: "Containerization platform for building, shipping, and running applications in isolated environments.",
-        experience: "Started working with Docker at BDM INFOTECH and continued using it for containerizing applications. Implemented Docker for microservices architecture and development environment consistency."
+        experience: "Started working with Docker at BDM INFOTECH. Implemented Docker for microservices architecture and development environment consistency.",
+        level: 85
       },
       {
         name: "KUBERNETES",
         description: "Container orchestration platform for automating deployment, scaling, and management of applications.",
-        experience: "Working on Kubernetes for orchestrating containerized applications and managing microservices at scale. Part of DevOps skill enhancement journey."
+        experience: "Working on Kubernetes for orchestrating containerized applications and managing microservices at scale.",
+        level: 75
       },
       {
         name: "AWS",
         description: "Cloud computing platform offering scalable infrastructure and services for application deployment.",
-        experience: "Experience deploying and managing applications on AWS. Working on cloud infrastructure and exploring various AWS services for scalable application deployment."
+        experience: "Experience deploying and managing applications on AWS. Working on cloud infrastructure and exploring various AWS services.",
+        level: 80
       },
       {
         name: "MONGODB",
         description: "NoSQL database for storing and managing unstructured data with flexible schema design.",
-        experience: "Used MongoDB for projects requiring flexible data models and scalable document storage. Experience with database design and query optimization for NoSQL databases."
+        experience: "Used MongoDB for projects requiring flexible data models and scalable document storage.",
+        level: 82
       },
       {
         name: "MYSQL",
         description: "Relational database management system for structured data storage and complex queries.",
-        experience: "Extensive experience with MySQL at iThink Logistics and Pay1. Designed database schemas, wrote optimized queries, and implemented database performance improvements. Integrated MySQL with web applications for robust data management."
+        experience: "Extensive experience with MySQL at iThink Logistics and Pay1. Designed database schemas, wrote optimized queries.",
+        level: 92
+      },
+      {
+        name: "ASTRO",
+        description: "Web framework for building content-driven websites like blogs, marketing, and e-commerce.",
+        experience: "Built this portfolio using Astro to ensure high performance and SEO optimization.",
+        level: 85
+      },
+      {
+        name: "LANGCHAIN",
+        description: "Framework for developing applications powered by language models.",
+        experience: "Building LLM-powered applications and agents for automated workflows.",
+        level: 70
+      },
+      {
+        name: "OPENAI",
+        description: "API for accessing powerful AI models like GPT-4 for natural language processing.",
+        experience: "Integrated OpenAI API for text generation and analysis in various projects.",
+        level: 75
+      },
+      {
+        name: "HUGGINGFACE",
+        description: "Platform for sharing and collaborating on machine learning models and datasets.",
+        experience: "Utilizing Hugging Face transformers for local model deployment and fine-tuning.",
+        level: 70
       }
     ]
   },
@@ -172,14 +232,14 @@ export const SITE_CONTENT: SiteContent = {
       summary: "A blog platform where you can express yourself and connect with others Devs.",
       linkPreview: "https://hashnode.surajshetty.blog",
       linkSource: "https://hashnode.surajshetty.blog/",
-      image: "/hashnode-1.webp",
+      image: hashnode,
     }, 
     {
       name: "Medium Blog",
       summary: "Personal blog where I write about things I find interesting in development.",
       linkPreview: "https://medium.com/@shetty44444",
       linkSource: "https://medium.com/@shetty44444",
-      image: "/medium-1.webp",
+      image: medium,
     },
   ],
   projects: [
@@ -188,21 +248,21 @@ export const SITE_CONTENT: SiteContent = {
       summary: "A full-featured e-commerce platform built with modern web technologies.",
       linkPreview: "https://github.com/surajshetty",
       linkSource: "https://github.com/surajshetty",
-      image: "/shopify-clon.png",
+      image: shopify,
     },
     {
       name: "Instagram Clone",
       summary: "A social media application with real-time features and image sharing.",
       linkPreview: "https://github.com/surajshetty",
       linkSource: "https://github.com/surajshetty",
-      image: "/clone-ig.png",
+      image: cloneIg,
     },
     {
       name: "Spotify Clone",
       summary: "A music streaming platform with playlist management and audio playback.",
       linkPreview: "https://github.com/surajshetty",
       linkSource: "https://github.com/surajshetty",
-      image: "/spotifu.png",
+      image: spotifu,
     }
   ],
   about: {
@@ -211,7 +271,6 @@ export const SITE_CONTENT: SiteContent = {
 
       #BackendDevelopment #Microservices #DataScience #AI #TechInnovation
     `,
-    image: "/alejandro-big.jpg",
   },
 };
 

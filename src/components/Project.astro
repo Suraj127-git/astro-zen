@@ -13,26 +13,26 @@ const { projects } = Astro.props;
 <Section text="Featured Projects" href="projects">
   <div class="relative overflow-hidden py-8">
     <!-- Gradient overlays -->
-    <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none hidden md:block"></div>
-    <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none hidden md:block"></div>
+    <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-bg to-transparent z-10 pointer-events-none hidden md:block"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-bg to-transparent z-10 pointer-events-none hidden md:block"></div>
 
     <div id="project-carousel" class="flex snap-x snap-mandatory overflow-x-auto gap-8 pb-8 px-4 hide-scrollbar">
       {projects.map(({ name, summary, image, linkPreview, linkSource }, index) => {
         return (
           <div class="project-slide snap-center flex-shrink-0 w-[90%] md:w-[600px] lg:w-[700px]">
-            <div class="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm project-card overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 h-full">
-              <div class="w-full h-[580px] md:h-[450px] relative z-[1] bg-[#1c232d]/85 before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[3%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 overflow-hidden">
+            <div class="group rounded-2xl border border-border bg-gradient-to-br from-card-bg to-transparent backdrop-blur-sm project-card overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 h-full">
+              <div class="w-full h-[580px] md:h-[450px] relative z-[1] bg-overlay/85 before:content-[''] before:rounded-2xl before:absolute before:z-[-1] before:opacity-[5%] dark:before:opacity-[3%] before:inset-0 before:bg-[url(/raja.png)] before:bg-repeat before:bg-[length:128px] rounded-2xl grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 overflow-hidden">
                 <div class="px-6 md:px-8 pt-8 md:pt-12 project-content flex flex-col justify-between">
                   <div>
                     <div class="mb-4 inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-medium">
                       PROJECT {String(index + 1).padStart(2, '0')}
                     </div>
-                    <h3 class="text-2xl md:text-3xl font-medium font-serif mb-4 text-white group-hover:text-primary transition-colors duration-300 project-title">
+                    <h3 class="text-2xl md:text-3xl font-medium font-serif mb-4 text-text group-hover:text-primary transition-colors duration-300 project-title">
                       {name}
                     </h3>
-                    <p class="text-neutral text-sm md:text-base leading-relaxed project-summary">{summary}</p>
+                    <p class="text-secondary text-sm md:text-base leading-relaxed project-summary">{summary}</p>
                   </div>
-                  <div class="pt-6 flex gap-4 text-white project-links">
+                  <div class="pt-6 flex gap-4 text-text project-links">
                     <a
                       href={linkPreview}
                       target="_blank"
@@ -47,7 +47,7 @@ const { projects } = Astro.props;
                       <a
                         href={linkSource}
                         target="_blank"
-                        class="group/link px-5 py-2.5 rounded-full border border-white/20 hover:border-white/40 text-white/70 hover:text-white transition-all duration-300 text-sm font-medium inline-flex items-center gap-2"
+                        class="group/link px-5 py-2.5 rounded-full border border-border hover:border-text text-secondary hover:text-text transition-all duration-300 text-sm font-medium inline-flex items-center gap-2"
                       >
                         <span>GitHub</span>
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ const { projects } = Astro.props;
                   </div>
                 </div>
                 <div class="flex items-center justify-center overflow-hidden project-image-wrapper relative">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-bg/50 to-transparent z-10"></div>
                   <Image
                     src={image}
                     width={700}
@@ -76,19 +76,19 @@ const { projects } = Astro.props;
     </div>
     <button
       id="project-prev"
-      class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-white/10 hover:border-primary shadow-lg"
+      class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-bg/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-border hover:border-primary shadow-lg"
     >
       <span class="sr-only">Previous</span>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-text">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
       </svg>
     </button>
     <button
       id="project-next"
-      class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-white/10 hover:border-primary shadow-lg"
+      class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-bg/70 backdrop-blur-sm p-3 rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 z-20 border border-border hover:border-primary shadow-lg"
     >
       <span class="sr-only">Next</span>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-text">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
       </svg>
     </button>
@@ -97,7 +97,7 @@ const { projects } = Astro.props;
     <div class="flex justify-center gap-2 mt-8 project-dots">
       {projects.map((_, index) => (
         <button
-          class="w-2 h-2 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300 project-dot"
+          class="w-2 h-2 rounded-full bg-border hover:bg-secondary/40 transition-all duration-300 project-dot"
           data-index={index}
           aria-label={`Go to project ${index + 1}`}
         ></button>
@@ -109,6 +109,9 @@ const { projects } = Astro.props;
 <script>
   async function initProjectAnimations() {
     try {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
       const gsap = (await import('gsap')).default;
       const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
@@ -147,7 +150,10 @@ const { projects } = Astro.props;
           if (index === currentIndex) {
             gsap.to(dot, { scale: 1.5, backgroundColor: "#3b82f6", duration: 0.3 });
           } else {
-            gsap.to(dot, { scale: 1, backgroundColor: "rgba(255,255,255,0.2)", duration: 0.3 });
+            // Revert to CSS class styling for inactive state
+            gsap.to(dot, { scale: 1, backgroundColor: "transparent", duration: 0.3, onComplete: () => {
+              gsap.set(dot, { clearProps: "backgroundColor" });
+            }});
           }
         });
       }

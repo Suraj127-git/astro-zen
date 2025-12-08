@@ -2,6 +2,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     fontFamily: {
@@ -30,10 +31,20 @@ export default {
         tight: "-0.25px",
       },
       colors: {
-        primary: "#2563EB",
-        neutral: "#94A3B8",
-        white: "#E2E8F0",
-        black: "#0E141B",
+        // Semantic Colors (Theming)
+        bg: "rgb(var(--color-bg) / <alpha-value>)",
+        text: "rgb(var(--color-text) / <alpha-value>)",
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        accent: "rgb(var(--color-accent) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        "card-bg": "rgb(var(--color-card-bg) / <alpha-value>)",
+        overlay: "rgb(var(--color-overlay) / <alpha-value>)",
+        
+        // Legacy/Specific colors
+        neutral: "rgb(var(--color-secondary) / <alpha-value>)",
+        "dark-bg": "#0E141B",
+        "off-white": "#E2E8F0",
       },
       keyframes: {
         slideIn: {

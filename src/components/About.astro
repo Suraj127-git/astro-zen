@@ -8,36 +8,28 @@ const { description } = Astro.props;
 ---
 
 <Section text="About Me" href="about">
-  <div class="relative">
-    <!-- Background gradient -->
-    <div class="absolute -inset-10 bg-gradient-to-r from-primary/10 via-blue-500/10 to-primary/10 blur-3xl opacity-30 pointer-events-none"></div>
+  <div class="relative max-w-4xl mx-auto">
+    <!-- Subtle Background gradient - kept minimal -->
+    <div class="absolute -inset-10 bg-gradient-to-r from-primary/5 via-blue-500/5 to-primary/5 blur-3xl opacity-20 pointer-events-none will-change-transform"></div>
 
-    <div class="relative p-8 md:p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm about-card">
-      <!-- Decorative corner elements -->
-      <div class="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-primary/30 rounded-tl-3xl corner-tl"></div>
-      <div class="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-primary/30 rounded-br-3xl corner-br"></div>
-
+    <div class="relative p-8 md:p-12 rounded-3xl border border-border bg-gradient-to-br from-card-bg to-transparent backdrop-blur-sm about-card overflow-hidden will-change-transform">
+      
       <div class="flex flex-col items-center text-center">
-        <!-- Animated quote marks -->
-        <div class="mb-6 text-primary/20 text-6xl font-serif leading-none quote-mark">"</div>
+          
+          <div class="text-secondary text-base md:text-lg leading-relaxed about-text space-y-6">
+            {description.split('\n\n').map((paragraph: string) => (
+              <p class="paragraph will-change-transform">{paragraph.trim()}</p>
+            ))}
+          </div>
 
-        <div class="text-neutral w-auto text-base md:text-lg leading-relaxed md:w-11/12 about-text max-w-4xl space-y-6">
-          {description.split('\n\n').map((paragraph: string) => (
-            <p class="paragraph">{paragraph.trim()}</p>
-          ))}
-        </div>
-
-        <!-- Hashtags -->
-        <div class="mt-8 flex flex-wrap justify-center gap-3 hashtags">
-          {description.match(/#\w+/g)?.map((tag: string) => (
-            <span class="px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium hashtag hover:bg-primary hover:text-white transition-all duration-300 cursor-default">
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <!-- Decorative line -->
-        <div class="mt-10 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent decorative-line"></div>
+          <!-- Hashtags -->
+          <div class="mt-8 flex flex-wrap justify-center gap-3 hashtags">
+            {description.match(/#\w+/g)?.map((tag: string) => (
+              <span class="px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium hashtag hover:bg-primary hover:text-white transition-all duration-300 cursor-default will-change-transform">
+                {tag}
+              </span>
+            ))}
+          </div>
       </div>
     </div>
   </div>
@@ -46,159 +38,100 @@ const { description } = Astro.props;
 <script>
   async function initAboutAnimation() {
     try {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
       const gsap = (await import('gsap')).default;
       const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
       gsap.registerPlugin(ScrollTrigger);
 
+      const aboutSection = document.getElementById('about');
+      if (!aboutSection) return;
+
+      // Apply hardware acceleration only within About section
+      aboutSection.querySelectorAll('.will-change-transform').forEach(el => {
+        (el as HTMLElement).style.transform = 'translateZ(0)';
+        (el as HTMLElement).style.willChange = 'transform';
+      });
+
       // Ensure all about content is visible by default
-      const card = document.querySelector('.about-card');
-      const cornerTl = document.querySelector('.corner-tl');
-      const cornerBr = document.querySelector('.corner-br');
-      const quoteMark = document.querySelector('.quote-mark');
-      const paragraphs = document.querySelectorAll('.paragraph');
-      const hashtags = document.querySelectorAll('.hashtag');
-      const decorativeLine = document.querySelector('.decorative-line');
+      const card = aboutSection.querySelector('.about-card');
+      const paragraphs = aboutSection.querySelectorAll('.paragraph');
+      const hashtags = aboutSection.querySelectorAll('.hashtag');
 
       if (card) gsap.set(card, { opacity: 1, scale: 1 });
-      if (cornerTl) gsap.set(cornerTl, { opacity: 1 });
-      if (cornerBr) gsap.set(cornerBr, { opacity: 1 });
-      if (quoteMark) gsap.set(quoteMark, { opacity: 1, scale: 1 });
       if (paragraphs.length) gsap.set(paragraphs, { opacity: 1 });
       if (hashtags.length) gsap.set(hashtags, { opacity: 1, scale: 1 });
-      if (decorativeLine) gsap.set(decorativeLine, { opacity: 1 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: '.about-card',
-          start: "top 80%",
-          toggleActions: "play none none reverse"
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+          // Performance optimizations
+          fastScrollEnd: true,
+        },
+        onComplete: () => {
+          // Cleanup after animation
+          aboutSection.querySelectorAll('.will-change-transform').forEach(el => {
+            (el as HTMLElement).style.willChange = 'auto';
+          });
         }
       });
 
-      // Card entrance
+      // Optimized card entrance - faster and more subtle
       if (card) {
         tl.from(card, {
           opacity: 0,
-          y: 80,
-          scale: 0.95,
-          duration: 0.9,
-          ease: "power3.out"
+          y: 30,
+          scale: 0.98,
+          duration: 0.4,
+          ease: "power2.out"
         });
       }
 
-      // Corner decorations
-      if (cornerTl) {
-        tl.from(cornerTl, {
-          x: -20,
-          y: -20,
-          opacity: 0,
-          duration: 0.6,
-          ease: "back.out(1.7)"
-        }, "-=0.5");
-      }
-
-      if (cornerBr) {
-        tl.from(cornerBr, {
-          x: 20,
-          y: 20,
-          opacity: 0,
-          duration: 0.6,
-          ease: "back.out(1.7)"
-        }, "-=0.5");
-      }
-
-      // Quote mark
-      if (quoteMark) {
-        tl.from(quoteMark, {
-          scale: 0,
-          opacity: 0,
-          rotation: -180,
-          duration: 0.7,
-          ease: "back.out(1.7)"
-        }, "-=0.3");
-      }
-
-      // Paragraphs with stagger
+      // Optimized content animations - quick reveal
       if (paragraphs.length) {
         tl.from(paragraphs, {
+          y: 10,
           opacity: 0,
-          y: 30,
-          duration: 0.6,
-          stagger: 0.15,
+          stagger: 0.05,
+          duration: 0.3,
           ease: "power2.out"
         }, "-=0.2");
       }
 
-      // Hashtags pop in
       if (hashtags.length) {
         tl.from(hashtags, {
-          scale: 0,
+          scale: 0.9,
           opacity: 0,
-          duration: 0.4,
-          stagger: 0.08,
-          ease: "back.out(2)"
-        }, "-=0.2");
+          stagger: 0.02,
+          duration: 0.25,
+          ease: "back.out(1.2)"
+        }, "-=0.15");
       }
 
-      // Decorative line
-      if (decorativeLine) {
-        tl.from(decorativeLine, {
-          scaleX: 0,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.inOut"
-        }, "-=0.2");
-      }
-
-      // Removed floating animation for cleaner appearance
-
-      // Glow effect on hover for hashtags
-      hashtags.forEach(tag => {
-        tag.addEventListener('mouseenter', function(this: HTMLElement) {
-          gsap.to(this, {
-            scale: 1.1,
-            boxShadow: "0 0 20px rgba(37, 99, 235, 0.5)",
-            duration: 0.3,
-            ease: "back.out(1.7)"
-          });
-        });
-
-        tag.addEventListener('mouseleave', function(this: HTMLElement) {
-          gsap.to(this, {
-            scale: 1,
-            boxShadow: "0 0 0px rgba(37, 99, 235, 0)",
-            duration: 0.3
-          });
-        });
-      });
-
-      // Removed parallax effect for cleaner appearance
-    } catch (error) {
-      console.error('About animation failed:', error);
-      // Ensure all about content is visible even if animation fails
-      const elements = document.querySelectorAll('.about-card, .corner-tl, .corner-br, .quote-mark, .paragraph, .hashtag, .decorative-line');
-      elements.forEach(el => {
-        (el as HTMLElement).style.opacity = '1';
-        (el as HTMLElement).style.visibility = 'visible';
-      });
+    } catch (e) {
+      console.error("GSAP animation error:", e);
     }
   }
 
-  // Initialize immediately if DOM is ready
+  // Run on load with cleanup
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAboutAnimation);
   } else {
     initAboutAnimation();
   }
+
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    try {
+      import('gsap').then(({ default: gsap }) => {
+        gsap.killTweensOf('.about-card, .paragraph, .hashtag');
+      });
+    } catch (error) {
+      console.error('Animation cleanup error:', error);
+    }
+  });
 </script>
-
-<style>
-  .about-card {
-    will-change: transform;
-  }
-
-  .hashtag {
-    will-change: transform;
-  }
-</style>

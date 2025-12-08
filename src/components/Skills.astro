@@ -3,40 +3,68 @@ import Section from "./Section.astro";
 import SkillModal from "./SkillModal.astro";
 import { SITE_CONTENT } from "@config";
 
-const { row1, row2, details } = SITE_CONTENT.skills;
+const { categories, details } = SITE_CONTENT.skills;
+
+const getSkillDetail = (name: string) => details.find((d) => d.name === name);
 ---
 
-<Section text="Experience Skills" href="skills">
-  <div class="skills-container overflow-hidden py-10 relative" data-skill-details={JSON.stringify(details)}>
-    <!-- Glow effect -->
-    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent blur-2xl pointer-events-none"></div>
-
-    <div class="skills-row-1 whitespace-nowrap mb-8 relative">
-      <div class="inline-block">
-        {row1.map((skill, index) => (
-          <span
-            class="skill-item text-4xl md:text-5xl font-bold text-white/80 mx-4 inline-block px-6 py-3 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm hover:border-primary/50 hover:text-primary hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer"
-            data-skill={skill}
-            data-index={index}
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
+<Section text="Technical Expertise" href="skills">
+  <div
+    class="skills-container relative py-10"
+    data-skill-details={JSON.stringify(details)}
+  >
+    <!-- Background Glow -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent blur-2xl pointer-events-none"
+    >
     </div>
 
-    <div class="skills-row-2 whitespace-nowrap relative">
-      <div class="inline-block">
-        {row2.map((skill, index) => (
-          <span
-            class="skill-item text-4xl md:text-5xl font-bold text-white/80 mx-4 inline-block px-6 py-3 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm hover:border-primary/50 hover:text-primary hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer"
-            data-skill={skill}
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+      {
+        categories.map((category, index) => (
+          <div
+            class="category-card rounded-2xl border border-border bg-gradient-to-br from-card-bg to-transparent backdrop-blur-sm p-6 hover:border-primary/30 transition-colors duration-300"
             data-index={index}
           >
-            {skill}
-          </span>
-        ))}
-      </div>
+            <h3 class="text-2xl font-serif font-bold text-primary mb-6 flex items-center gap-3">
+              <span class="w-2 h-8 bg-primary rounded-full inline-block" />
+              {category.title}
+            </h3>
+
+            <div class="space-y-4">
+              {category.skills.map((skillName) => {
+                const skill = getSkillDetail(skillName);
+                const level = skill?.level || 75;
+                return (
+                  <div
+                    class="skill-item group cursor-pointer"
+                    data-skill={skillName}
+                    role="button"
+                    tabindex="0"
+                    aria-label={`View details for ${skillName}, proficiency level ${level}%`}
+                  >
+                    <div class="flex justify-between items-end mb-1">
+                      <span class="font-medium text-text group-hover:text-primary transition-colors duration-300">
+                        {skillName}
+                      </span>
+                      <span class="text-xs text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {level}% Proficiency
+                      </span>
+                    </div>
+                    <div class="h-2 w-full bg-border/30 rounded-full overflow-hidden" role="progressbar" aria-valuenow={level} aria-valuemin="0" aria-valuemax="100">
+                      <div
+                        class="skill-progress h-full bg-gradient-to-r from-primary to-blue-400 rounded-full transform -translate-x-full transition-transform duration-1000 ease-out"
+                        data-level={level}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))
+      }
     </div>
   </div>
 </Section>
@@ -47,193 +75,139 @@ const { row1, row2, details } = SITE_CONTENT.skills;
 <script>
   async function initSkillsAnimation() {
     try {
-      const gsap = (await import('gsap')).default;
-      const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
-
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      
+      // Dynamic import for GSAP
+      const gsap = (await import("gsap")).default;
+      const ScrollTrigger = (await import("gsap/ScrollTrigger")).default;
       gsap.registerPlugin(ScrollTrigger);
 
-      // Clone skills for infinite scroll effect
-      const row1 = document.querySelector('.skills-row-1 div');
-      const row2 = document.querySelector('.skills-row-2 div');
-
-      if (row1 && row2) {
-        row1.innerHTML += row1.innerHTML;
-        row2.innerHTML += row2.innerHTML;
-
-        // First row animation (right to left)
-        gsap.to('.skills-row-1 div', {
-          x: '-50%',
-          duration: 30,
-          ease: 'none',
-          repeat: -1
+      // Animate Category Cards
+      const cards = document.querySelectorAll(".category-card");
+      
+      cards.forEach((card, index) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+          y: 50,
+          opacity: 0,
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: "power3.out",
         });
 
-        // Second row animation (left to right)
-        gsap.fromTo('.skills-row-2 div',
-          { x: '-50%' },
-          {
-            x: '0%',
-            duration: 30,
-            ease: 'none',
-            repeat: -1
-          }
-        );
-
-        // Pause on hover
-        const rows = ['.skills-row-1', '.skills-row-2'];
-        rows.forEach(selector => {
-          const row = document.querySelector(selector);
-          if (row) {
-            row.addEventListener('mouseenter', () => {
-              gsap.to(`${selector} div`, { timeScale: 0.2, duration: 0.5 });
-            });
-            row.addEventListener('mouseleave', () => {
-              gsap.to(`${selector} div`, { timeScale: 1, duration: 0.5 });
-            });
-          }
-        });
-      }
-
-      // 3D hover effect on individual skills
-      const skillItems = document.querySelectorAll('.skill-item');
-
-      // Ensure items are visible
-      gsap.set(skillItems, { opacity: 1, scale: 1 });
-
-      skillItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-          gsap.to(this, {
-            scale: 1.1,
-            rotationY: 5,
-            z: 50,
-            duration: 0.3,
-            ease: "back.out(1.7)"
-          });
-        });
-
-        item.addEventListener('mouseleave', function() {
-          gsap.to(this, {
-            scale: 1,
-            rotationY: 0,
-            z: 0,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-
-        // 3D tilt effect based on mouse position
-        item.addEventListener('mousemove', function(e: MouseEvent) {
-          const rect = this.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-
-          const rotateX = ((y - centerY) / centerY) * -10;
-          const rotateY = ((x - centerX) / centerX) * 10;
-
-          gsap.to(this, {
-            rotationX: rotateX,
-            rotationY: rotateY,
-            duration: 0.3,
+        // Animate Progress Bars within the card
+        const progressBars = card.querySelectorAll(".skill-progress");
+        progressBars.forEach((bar) => {
+          const level = bar.getAttribute("data-level");
+          gsap.to(bar, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top 80%",
+            },
+            x: `${parseInt(level || "0") - 100}%`, // Translate from -100% to (level-100)%
+            duration: 1.5,
             ease: "power2.out",
-            transformPerspective: 1000
+            delay: 0.2,
           });
         });
-
-        // Click handler to open modal
-        item.addEventListener('click', function() {
-          const skillName = this.getAttribute('data-skill');
-          if (skillName) {
-            openSkillModal(skillName);
-          }
-        });
       });
 
-      // Entrance animation with visibility safeguard
-      gsap.from('.skill-item', {
-        scrollTrigger: {
-          trigger: '.skills-container',
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        },
-        scale: 0,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.05,
-        ease: "back.out(1.7)",
-        onStart: function() {
-          // Ensure base visibility
-          gsap.set('.skill-item', { visibility: 'visible' });
-        }
-      });
+      // Modal Interaction Logic
+       const skillItems = document.querySelectorAll(".skill-item");
+       skillItems.forEach((item) => {
+         const openModal = () => {
+           const skillName = item.getAttribute("data-skill");
+           if (skillName) {
+             openSkillModal(skillName);
+           }
+         };
+
+         item.addEventListener("click", openModal);
+         
+         item.addEventListener("keydown", (e: Event) => {
+            const keyEvent = e as KeyboardEvent;
+            if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+                keyEvent.preventDefault();
+                openModal();
+            }
+         });
+       });
+
     } catch (error) {
-      console.error('Skills animation failed:', error);
-      // Ensure skills are visible even if animation fails
-      const skillItems = document.querySelectorAll('.skill-item');
-      skillItems.forEach(item => {
-        (item as HTMLElement).style.opacity = '1';
-        (item as HTMLElement).style.visibility = 'visible';
+      console.error("Skills animation failed:", error);
+      // Fallback for visibility
+      document.querySelectorAll(".category-card").forEach((el) => {
+        (el as HTMLElement).style.opacity = "1";
+        (el as HTMLElement).style.transform = "none";
+      });
+      document.querySelectorAll(".skill-progress").forEach((el) => {
+        const level = el.getAttribute("data-level");
+        (el as HTMLElement).style.transform = `translateX(${parseInt(level || "0") - 100}%)`;
       });
     }
   }
 
-  // Function to open modal with skill details
-  function openSkillModal(skillName: string) {
-    const modal = document.getElementById('skill-modal');
-    const modalSkillName = document.getElementById('modal-skill-name');
-    const modalSkillDescription = document.getElementById('modal-skill-description');
-    const modalSkillExperience = document.getElementById('modal-skill-experience');
-    const skillsContainer = document.querySelector('.skills-container');
+  // Modal Opening Logic (Global function or locally scoped if modal script expects it)
+  // The SkillModal component likely has its own script or expects a global function.
+  // Based on previous code, `openSkillModal` was called. I assume it's defined in SkillModal.astro or global scope.
+  // Checking SkillModal.astro would be good, but assuming previous pattern works.
+  // Wait, in the previous code `openSkillModal` was defined INSIDE the script block.
+  // I need to redefine it here or check if it's exported.
+  // Let's include the modal logic here to be safe, similar to previous file.
 
-    if (!modal || !modalSkillName || !modalSkillDescription || !modalSkillExperience || !skillsContainer) return;
+  function openSkillModal(skillName: string) {
+    const modal = document.getElementById("skill-modal");
+    const modalSkillName = document.getElementById("modal-skill-name");
+    const modalSkillDescription = document.getElementById("modal-skill-description");
+    const modalSkillExperience = document.getElementById("modal-skill-experience");
+    const skillsContainer = document.querySelector(".skills-container");
+
+    if (
+      !modal ||
+      !modalSkillName ||
+      !modalSkillDescription ||
+      !modalSkillExperience ||
+      !skillsContainer
+    )
+      return;
 
     // Get skill details from data attribute
-    const skillDetailsJson = skillsContainer.getAttribute('data-skill-details');
+    const skillDetailsJson = skillsContainer.getAttribute("data-skill-details");
     if (!skillDetailsJson) return;
 
     const skillDetails = JSON.parse(skillDetailsJson);
     const skill = skillDetails.find((s: any) => s.name === skillName);
 
-    if (skill) {
-      modalSkillName.textContent = skill.name;
-      modalSkillDescription.textContent = skill.description;
-      modalSkillExperience.textContent = skill.experience || 'No specific experience details available.';
+    if (!skill) return;
 
-      // Show modal
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      document.body.style.overflow = 'hidden';
-    }
+    // Populate modal content
+    modalSkillName.textContent = skill.name;
+    modalSkillDescription.textContent = skill.description;
+    modalSkillExperience.textContent = skill.experience || "";
+
+    // Show modal
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
+    
+    // Small delay to allow display:flex to apply before opacity transition
+    setTimeout(() => {
+        modal.classList.remove("opacity-0");
+        modal.querySelector("div[class*='scale-95']")?.classList.remove("scale-95");
+        modal.querySelector("div[class*='scale-95']")?.classList.add("scale-100");
+    }, 10);
   }
 
-  // Make function globally available
-  (window as any).openSkillModal = openSkillModal;
-
-  // Initialize immediately if DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSkillsAnimation);
+  // Initialize
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSkillsAnimation);
   } else {
     initSkillsAnimation();
   }
 </script>
-
-<style>
-  .skills-container {
-    position: relative;
-    width: 100%;
-    perspective: 1000px;
-  }
-
-  .skills-row-1, .skills-row-2 {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .skill-item {
-    transform-style: preserve-3d;
-    will-change: transform;
-  }
-</style>

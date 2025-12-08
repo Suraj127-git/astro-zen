@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 export interface SiteConfig extends HeaderProps {
   title: string;
   description: string;
@@ -12,13 +14,19 @@ export interface SkillDetail {
   name: string;
   description: string;
   experience?: string;
+  level?: number;
+  icon?: string;
+}
+
+export interface SkillCategory {
+  title: string;
+  skills: string[];
 }
 
 export interface SiteContent {
   hero: HeroProps;
   skills: {
-    row1: string[];
-    row2: string[];
+    categories: SkillCategory[];
     details: SkillDetail[];
   };
   experience: ExperienceProps[];
@@ -54,17 +62,16 @@ export interface ExperienceProps {
 export interface ProjectProps {
   name: string;
   summary: string;
-  image: string;
+  image: ImageMetadata;
   linkPreview?: string;
   linkSource?: string;
 }
 
 export interface AboutProps {
   description: string;
-  image: string;
 }
 
 export interface HeaderProps {
-  siteLogo: string;
+  siteLogo: ImageMetadata;
   navLinks: { text: string; href: string }[];
 }
