@@ -10,54 +10,56 @@ const { siteLogo, navLinks } = Astro.props;
 ---
 
 <header
-  class="max-w-7xl mx-auto flex justify-between px-4 sm:px-6 md:px-8 lg:px-12 py-6 top-0 z-50 sticky bg-bg/80 backdrop-blur-xl border-b border-border/40 animate-slideIn transition-colors duration-300"
+  class="w-full top-0 z-50 sticky bg-bg/80 backdrop-blur-xl border-b border-border/40 animate-slideIn transition-colors duration-300"
 >
-  <a href="/" aria-label="Home link" class="logo-link relative group">
-    <Image
-      class="rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
-      src={siteLogo}
-      width={45}
-      height={45}
-      alt="website logo"
-    />
-    <div class="absolute inset-0 rounded-full bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-  </a>
+  <div class="max-w-7xl mx-auto flex justify-between px-4 sm:px-6 md:px-8 lg:px-12 py-6">
+    <a href="/" aria-label="Home link" class="logo-link relative group">
+      <Image
+        class="rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+        src={siteLogo}
+        width={45}
+        height={45}
+        alt="website logo"
+      />
+      <div class="absolute inset-0 rounded-full bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </a>
 
-  <div class="flex items-center gap-2 sm:hidden">
-    <ThemeToggle />
-    <button
-      type="button"
-      id="menu-button"
-      class="text-secondary px-1.5 hover:text-text transition-colors"
-      aria-expanded="false"
-      aria-controls="main-menu"
+    <div class="flex items-center gap-2 sm:hidden">
+      <ThemeToggle />
+      <button
+        type="button"
+        id="menu-button"
+        class="text-secondary px-1.5 hover:text-text transition-colors"
+        aria-expanded="false"
+        aria-controls="main-menu"
+      >
+        <Menu />
+      </button>
+    </div>
+
+    <nav
+      class="hidden text-secondary border absolute right-5 top-20 bg-bg/95 backdrop-blur-xl border-border py-5 px-4 rounded-xl shadow-2xl sm:block sm:border-0 sm:p-0 sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none transition-colors duration-300"
+      id="main-menu"
     >
-      <Menu />
-    </button>
+      <ul class="sm:flex gap-2 items-center">
+        {
+          navLinks.map((link) => (
+            <li class="relative group">
+              <a
+                class={`font-medium text-sm p-2 block hover:text-text duration-300 transition-all nav-item relative after:absolute after:opacity-0 after:content-['•'] after:w-1 after:h-2 after:bottom-0 after:left-2/4 after:-translate-x-2/4 after:text-primary after:transition-opacity after:duration-300 before:absolute before:inset-0 before:bg-primary/10 before:rounded-lg before:scale-0 before:transition-transform before:duration-300 group-hover:before:scale-100`}
+                href={link.href}
+              >
+                {link.text}
+              </a>
+            </li>
+          ))
+        }
+        <li class="hidden sm:block ml-2">
+          <ThemeToggle />
+        </li>
+      </ul>
+    </nav>
   </div>
-
-  <nav
-    class="hidden text-secondary border absolute right-5 top-20 bg-bg/95 backdrop-blur-xl border-border py-5 px-4 rounded-xl shadow-2xl sm:block sm:border-0 sm:p-0 sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none transition-colors duration-300"
-    id="main-menu"
-  >
-    <ul class="sm:flex gap-2 items-center">
-      {
-        navLinks.map((link) => (
-          <li class="relative group">
-            <a
-              class={`font-medium text-sm p-2 block hover:text-text duration-300 transition-all nav-item relative after:absolute after:opacity-0 after:content-['•'] after:w-1 after:h-2 after:bottom-0 after:left-2/4 after:-translate-x-2/4 after:text-primary after:transition-opacity after:duration-300 before:absolute before:inset-0 before:bg-primary/10 before:rounded-lg before:scale-0 before:transition-transform before:duration-300 group-hover:before:scale-100`}
-              href={link.href}
-            >
-              {link.text}
-            </a>
-          </li>
-        ))
-      }
-      <li class="hidden sm:block ml-2">
-        <ThemeToggle />
-      </li>
-    </ul>
-  </nav>
 </header>
 
 <script>
