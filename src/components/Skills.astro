@@ -136,12 +136,18 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
     const modal = document.getElementById("skill-modal");
     const modalSkillName = document.getElementById("modal-skill-name");
     const modalSkillExperience = document.getElementById("modal-skill-experience");
+    const modalSkillProjects = document.getElementById("modal-skill-projects");
+    const modalSkillTools = document.getElementById("modal-skill-tools");
+    const modalSkillAchievements = document.getElementById("modal-skill-achievements");
     const skillsContainer = document.querySelector(".skills-container");
 
     if (
       !modal ||
       !modalSkillName ||
       !modalSkillExperience ||
+      !modalSkillProjects ||
+      !modalSkillTools ||
+      !modalSkillAchievements ||
       !skillsContainer
     )
       return;
@@ -157,7 +163,34 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
 
     // Populate modal content
     modalSkillName.textContent = skill.name;
-    modalSkillExperience.textContent = skill.experience || "";
+    modalSkillExperience.textContent = `${skill.experience || ""} - ${skill.level || ""}`;
+
+    // Populate projects
+    if (skill.projects && skill.projects.length > 0) {
+      modalSkillProjects.innerHTML = skill.projects.map((project: string) => 
+        `<li class="flex items-start gap-2"><span class="text-primary mt-1">•</span><span>${project}</span></li>`
+      ).join('');
+    } else {
+      modalSkillProjects.innerHTML = '<li class="text-secondary">No projects listed</li>';
+    }
+
+    // Populate tools
+    if (skill.tools && skill.tools.length > 0) {
+      modalSkillTools.innerHTML = skill.tools.map((tool: string) => 
+        `<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm border border-primary/20">${tool}</span>`
+      ).join('');
+    } else {
+      modalSkillTools.innerHTML = '<span class="text-secondary">No tools listed</span>';
+    }
+
+    // Populate achievements
+    if (skill.achievements && skill.achievements.length > 0) {
+      modalSkillAchievements.innerHTML = skill.achievements.map((achievement: string) => 
+        `<li class="flex items-start gap-2"><span class="text-primary mt-1">•</span><span>${achievement}</span></li>`
+      ).join('');
+    } else {
+      modalSkillAchievements.innerHTML = '<li class="text-secondary">No achievements listed</li>';
+    }
 
     // Show modal
     modal.classList.remove("hidden");
