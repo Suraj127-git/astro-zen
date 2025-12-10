@@ -12,10 +12,12 @@ export interface SiteConfig extends HeaderProps {
 
 export interface SkillDetail {
   name: string;
-  description: string;
   experience?: string;
-  level?: number;
+  level?: string;
   icon?: string;
+  projects: string[];
+  tools: string[];
+  achievements: string[];
 }
 
 export interface SkillCategory {

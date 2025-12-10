@@ -34,29 +34,18 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
 
             <div class="space-y-4">
               {category.skills.map((skillName) => {
-                const skill = getSkillDetail(skillName);
-                const level = skill?.level || 75;
                 return (
                   <div
                     class="skill-item group cursor-pointer"
                     data-skill={skillName}
                     role="button"
                     tabindex="0"
-                    aria-label={`View details for ${skillName}, proficiency level ${level}%`}
+                    aria-label={`View details for ${skillName}`}
                   >
                     <div class="flex justify-between items-end mb-1">
                       <span class="font-medium text-text group-hover:text-primary transition-colors duration-300">
                         {skillName}
                       </span>
-                      <span class="text-xs text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {level}% Proficiency
-                      </span>
-                    </div>
-                    <div class="h-2 w-full bg-border/30 rounded-full overflow-hidden" role="progressbar" aria-valuenow={level} aria-valuemin="0" aria-valuemax="100">
-                      <div
-                        class="skill-progress h-full bg-gradient-to-r from-primary to-blue-400 rounded-full transform -translate-x-full transition-transform duration-1000 ease-out"
-                        data-level={level}
-                      />
                     </div>
                   </div>
                 );
@@ -101,21 +90,7 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
           ease: "power3.out",
         });
 
-        // Animate Progress Bars within the card
-        const progressBars = card.querySelectorAll(".skill-progress");
-        progressBars.forEach((bar) => {
-          const level = bar.getAttribute("data-level");
-          gsap.to(bar, {
-            scrollTrigger: {
-              trigger: card,
-              start: "top 80%",
-            },
-            x: `${parseInt(level || "0") - 100}%`, // Translate from -100% to (level-100)%
-            duration: 1.5,
-            ease: "power2.out",
-            delay: 0.2,
-          });
-        });
+
       });
 
       // Modal Interaction Logic
@@ -146,10 +121,6 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
         (el as HTMLElement).style.opacity = "1";
         (el as HTMLElement).style.transform = "none";
       });
-      document.querySelectorAll(".skill-progress").forEach((el) => {
-        const level = el.getAttribute("data-level");
-        (el as HTMLElement).style.transform = `translateX(${parseInt(level || "0") - 100}%)`;
-      });
     }
   }
 
@@ -164,14 +135,12 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
   function openSkillModal(skillName: string) {
     const modal = document.getElementById("skill-modal");
     const modalSkillName = document.getElementById("modal-skill-name");
-    const modalSkillDescription = document.getElementById("modal-skill-description");
     const modalSkillExperience = document.getElementById("modal-skill-experience");
     const skillsContainer = document.querySelector(".skills-container");
 
     if (
       !modal ||
       !modalSkillName ||
-      !modalSkillDescription ||
       !modalSkillExperience ||
       !skillsContainer
     )
@@ -188,7 +157,6 @@ const getSkillDetail = (name: string) => details.find((d) => d.name === name);
 
     // Populate modal content
     modalSkillName.textContent = skill.name;
-    modalSkillDescription.textContent = skill.description;
     modalSkillExperience.textContent = skill.experience || "";
 
     // Show modal
