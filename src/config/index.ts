@@ -167,6 +167,14 @@ export const SITE_CONTENT: SiteContent = {
         achievements: ["Created 8+ Helm charts for microservices", "Automated deployment process reducing time by 70%", "Standardized configuration management across environments"]
       },
       {
+        name: "TRAEFIK",
+        experience: "2.0 years",
+        level: "Advanced",
+        projects: ["Microservices Load Balancing", "Ingress Controller Setup", "SSL Termination & Routing"],
+        tools: ["Docker", "Kubernetes", "Let's Encrypt", "ACME", "Middlewares", "Service Discovery"],
+        achievements: ["Configured zero-downtime deployments for 10+ services", "Automated SSL certificate management saving 5 hrs/month", "Reduced latency by 25% with intelligent traffic routing"]
+      },
+      {
         name: "APACHE KAFKA",
         experience: "1.0 year",
         level: "Intermediate",
@@ -281,21 +289,23 @@ export const SITE_CONTENT: SiteContent = {
     ]
   },
   experience: [
-        {
+    {
       company: "WebMD",
       position: "Software Engineer",
       startDate: "Oct 2025",
       endDate: "Present",
       summary: [
-        "Maintain Legacy Codebase",
-        "Led product development and ensured smooth integration of new features and requirements.",
-            ],
+        "Refactored legacy codebase to improve maintainability and performance.",
+        "Working on Microservice Architecture for Scalability and Availability For Medical Product.",
+        "Worked on LLM for Medical Product Email Catelog Notification System.",
+        "Worked on Cline AI agent for Codebase Scanning and Code Review.",
+        ],
     },
     {
       company: "Pay1",
       position: "Software Developer",
       startDate: "May 2024",
-      endDate: "Present",
+      endDate: "Oct 2025",
       summary: [
         "Worked on Sartch Product Created Whole Backend Architecture for recharge and utility & Bill Payment.",
         "Led product development and ensured smooth integration of new features and requirements.",
@@ -330,8 +340,8 @@ export const SITE_CONTENT: SiteContent = {
     {
       name: "Hashnode Blog",
       summary: "A blog platform where you can express yourself and connect with others Devs.",
-      linkPreview: "https://hashnode.surajshetty.blog",
-      linkSource: "https://hashnode.surajshetty.blog/",
+      linkPreview: "https://surajshetty.hashnode.dev",
+      linkSource: "https://surajshetty.hashnode.dev",
       image: hashnode,
     }, 
     {
@@ -344,9 +354,8 @@ export const SITE_CONTENT: SiteContent = {
   ],
   projects: [
     {
-      name: "Shopify Clone",
-      summary: "A full-featured e-commerce platform built with modern web technologies.",
-      linkPreview: "https://github.com/surajshetty",
+      name: "AI/ML",
+      summary: "30+ Projects on AI/ML",
       linkSource: "https://github.com/surajshetty",
       image: shopify,
     },
@@ -367,11 +376,9 @@ export const SITE_CONTENT: SiteContent = {
   ],
   about: {
     description: `
-      Passionate backend developer with a strong foundation in designing and implementing scalable and efficient server-side solutions. Specialized in creating robust APIs and database management. Committed to staying ahead in technology trends, I have a keen interest in Microservices architecture and a new curve in data analysis and data science, driving innovations towards AI-powered solutions. Eager to contribute to transformative projects and collaborate with like-minded professionals in the tech community. Let's connect and explore the possibilities of creating impactful solutions together!
+      Passionate backend software engineer with a strong foundation in designing and implementing scalable and efficient server-side solutions. Specialized in creating robust APIs and database management. Committed to staying ahead in technology trends, I have a keen interest in Microservices architecture and a new curve in data analysis and data science, driving innovations towards AI-powered solutions. Eager to contribute to transformative projects and collaborate with like-minded professionals in the tech community. Let's connect and explore the possibilities of creating impactful solutions together!
 
-      #BackendDevelopment #Microservices #DataScience #AI #TechInnovation
+      #BackendDevelopment #Microservices #GenerativeAI #TechInnovation
     `,
   },
 };
-
-// #5755ff
