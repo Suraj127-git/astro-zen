@@ -360,8 +360,8 @@ export const SITE_CONTENT: SiteContent = {
       image: shopify,
     },
     {
-      name: "Instagram Clone",
-      summary: "A social media application with real-time features and image sharing.",
+      name: "GenAI Blog Generator",
+      summary: "A blog generator that uses AI to create blog posts on any topic.",
       linkPreview: "https://github.com/surajshetty",
       linkSource: "https://github.com/surajshetty",
       image: cloneIg,
